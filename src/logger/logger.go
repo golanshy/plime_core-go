@@ -10,6 +10,10 @@ var (
 	log logger
 )
 
+type loggerInterface interface {
+	Printf(string, ...interface{})
+}
+
 type logger struct {
 	log *zap.Logger
 }
@@ -48,7 +52,7 @@ func (l logger) Printf(format string, v ...interface{}) {
 		Info(fmt.Sprintf(format, v...))
 	}
 }
-func GetLogger() logger {
+func GetLogger() loggerInterface {
 	return log
 }
 
