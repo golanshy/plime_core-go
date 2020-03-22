@@ -1,61 +1,92 @@
 package rest_errors
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 )
 
-type RestErr struct {
-	Message string        `json:"message"`
-	Status  int           `json:"status"`
-	Error   string        `json:"error"`
-	Causes  []interface{} `json:"causes"`
+type RestErr interface {
+	Message() string
+	Status() int
+	Error() string
+	Causes() []interface{}
 }
 
-func NewRestError(message string, status int, error string) *RestErr {
-	return &RestErr{
-		Message: message,
-		Status:  status,
-		Error:   error,
+type restErr struct {
+	message string        `json:"message"`
+	status  int           `json:"status"`
+	error   string        `json:"error"`
+	causes  []interface{} `json:"causes"`
+}
+
+func (e restErr) restErr() string {
+	return fmt.Sprintf("message: %s - status %d - error: %s - causes: [ %v]", e.message, e.status, e.error, e.causes)
+}
+
+func (e restErr) Message() string {
+	return e.message
+}
+func (e restErr) Status() int {
+	return e.status
+}
+func (e restErr) Error() string {
+	return e.error
+}
+func (e restErr) Causes() []interface{} {
+	return e.causes
+}
+
+func NewError(message string) error {
+	return errors.New(message)
+}
+
+func NewRestError(message string, status int, error string, causes []interface{}) RestErr {
+	return &restErr{
+		message: message,
+		status:  status,
+		error:   error,
+		causes:  causes,
 	}
 }
 
-func NewBadRequestError(message string) *RestErr {
-	return &RestErr{
-		Message: message,
-		Status:  http.StatusBadRequest,
-		Error:   "bad_request",
+func NewBadRequestError(message string) RestErr {
+	return restErr{
+		message: message,
+		status:  http.StatusBadRequest,
+		error:   "bad_request",
 	}
 }
 
-func NewNotFoundError(message string) *RestErr {
-	return &RestErr{
-		Message: message,
-		Status:  http.StatusNotFound,
-		Error:   "not_found",
+func NewNotFoundError(message string) RestErr {
+	return restErr{
+		message: message,
+		status:  http.StatusNotFound,
+		error:   "not_found",
 	}
 }
 
-func NewInternalServerError(message string, err error) *RestErr {
-	return &RestErr{
-		Message: message,
-		Status:  http.StatusInternalServerError,
-		Error:   "internal_server_error",
-		Causes:  []interface{}{err},
+func NewInternalServerError(message string, err error) RestErr {
+	return restErr{
+		message: message,
+		status:  http.StatusInternalServerError,
+		error:   "internal_server_error",
+		causes:  []interface{}{err},
 	}
 }
 
-func NewUnauthorizedError(message string) *RestErr {
-	return &RestErr{
-		Message: message,
-		Status:  http.StatusUnauthorized,
-		Error:   "unauthorized_access",
+func NewUnauthorizedError(message string) RestErr {
+	return restErr{
+		message: message,
+		status:  http.StatusUnauthorized,
+		error:   "unauthorized_access",
 	}
 }
 
-func NewForbiddenEmailVerificationError(message string) *RestErr {
-	return &RestErr{
-		Message: message,
-		Status:  http.StatusForbidden,
-		Error:   "forbidden_access",
+func NewForbiddenEmailVerificationError(message string) RestErr {
+	return restErr{
+		message: message,
+		status:  http.StatusForbidden,
+		error:   "forbidden_access",
 	}
 }
