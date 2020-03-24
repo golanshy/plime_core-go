@@ -3,7 +3,6 @@ package rest_errors
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 )
 
@@ -14,47 +13,19 @@ type RestErr interface {
 	Causes() []interface{}
 }
 
-type restErr struct {
-	message string        `json:"message"`
-	status  int           `json:"status"`
-	error   string        `json:"error"`
-	causes  []interface{} `json:"causes"`
-}
-
-func (e restErr) RestErr() restErr {
-	return fmt.Sprintf("message: %s - status %d - error: %s - causes: [ %v]", e.message, e.status, e.error, e.causes)
-}
-
-func (e restErr) Message() string {
-	return e.message
-}
-func (e restErr) Status() int {
-	return e.status
-}
-func (e restErr) Error() string {
-	return e.error
-}
-func (e restErr) Causes() []interface{} {
-	return e.causes
-}
-
-func NewError(message string) error {
-	return errors.New(message)
-}
-
-func NewRestError(message string, status int, error string, causes []interface{}) restErr {
-	return restErr{
-		message: message,
-		status:  status,
-		error:   error,
-		causes:  causes,
-	}
-}
-
-func NewRestErrorFromBytes(bytes []byte) (RestErr, error) {
-	var apiError restErr
+func NewRestErrorFromBytes(bytes []byte) (*RestErr, error) {
+	var apiError RestErr
 	if err := json.Unmarshal(bytes, &apiError); err != nil {
-		return nil, NewError("invalid json")
+		return nil, errors.New("invalid json")
+	}
+	return &apiError, nil
+}
+
+func NewRestError(message string, status int, error string) *RestErr {
+	return &RestErr{
+		Message: message,
+		Status:  status,
+		Error:   error,
 	}
 	return apiError, nil
 }
