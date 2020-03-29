@@ -62,7 +62,7 @@ func NewUnauthorizedError(message string) *RestErr {
 	}
 }
 
-func NewForbiddenEmailVerificationError(message string) *RestErr {
+func NewForbiddenError(message string) *RestErr {
 	return &RestErr{
 		Message: message,
 		Status:  http.StatusForbidden,
