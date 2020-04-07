@@ -2,7 +2,7 @@ package mysql_utils
 
 import (
 	"github.com/go-sql-driver/mysql"
-	"github.com/golanshy/plime_core-go/src/utils/rest_errors"
+	"github.com/golanshy/plime_core-go/utils/rest_errors"
 	"strings"
 )
 
