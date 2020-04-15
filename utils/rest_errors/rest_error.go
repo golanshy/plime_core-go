@@ -69,3 +69,14 @@ func NewForbiddenError(message string) *RestErr {
 		Error:   "forbidden_access",
 	}
 }
+
+func NewConflictError(message string) *RestErr {
+	return &RestErr{
+		Message: message,
+		Status:  http.StatusConflict,
+		Error:   "conflict_error",
+	}
+}
+
+
+
