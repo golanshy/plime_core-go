@@ -33,7 +33,7 @@ type AccessTokenRequest struct {
 	ClientSecret string `json:"client_secret"`
 
 	// User for refresh_token grant type
-	AccessToken string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 func (request *AccessTokenRequest) Validate() *rest_errors.RestErr {
@@ -59,13 +59,13 @@ func (request *AccessTokenRequest) Validate() *rest_errors.RestErr {
 }
 
 type AccessToken struct {
-	TokenType   string `json:"token_type,omitempty"`
-	AccessToken string `json:"access_token"`
+	TokenType    string `json:"token_type,omitempty"`
+	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
-	UserId      int64  `json:"user_id,omitempty"`
-	ClientId    string `json:"client_id,omitempty"`
-	DateCreated string `json:"date_created"`
-	Expires     int64  `json:"expires"`
+	UserId       int64  `json:"user_id,omitempty"`
+	ClientId     string `json:"client_id,omitempty"`
+	DateCreated  string `json:"date_created"`
+	Expires      int64  `json:"expires"`
 }
 
 // Web Frontend ClientId: 123
@@ -73,25 +73,25 @@ type AccessToken struct {
 
 func GetNewAccessTokenByUserId(userId int64) *AccessToken {
 	return &AccessToken{
-		TokenType:   TokenTypeBearer,
-		AccessToken: "",
+		TokenType:    TokenTypeBearer,
+		AccessToken:  "",
 		RefreshToken: "",
-		UserId:      userId,
-		ClientId:    "",
-		DateCreated: date_utils.GetNowDBFormat(),
-		Expires:     time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
+		UserId:       userId,
+		ClientId:     "",
+		DateCreated:  date_utils.GetNowDBFormat(),
+		Expires:      time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
 	}
 }
 
 func GetNewAccessTokenByClientId(clientId string) *AccessToken {
 	return &AccessToken{
-		TokenType:   TokenTypeBearer,
-		AccessToken: "",
+		TokenType:    TokenTypeBearer,
+		AccessToken:  "",
 		RefreshToken: "",
-		UserId:      0,
-		ClientId:    clientId,
-		DateCreated: date_utils.GetNowDBFormat(),
-		Expires:     time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
+		UserId:       0,
+		ClientId:     clientId,
+		DateCreated:  date_utils.GetNowDBFormat(),
+		Expires:      time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
 	}
 }
 
