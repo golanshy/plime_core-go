@@ -1,12 +1,12 @@
 package access_token_dto
 
 import (
-	"crypto/rand"
 	"fmt"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/logger"
 	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
+	"math/rand"
 	"strings"
 	"time"
 )
@@ -61,6 +61,7 @@ func (request *AccessTokenRequest) Validate() *rest_errors.RestErr {
 type AccessToken struct {
 	TokenType   string `json:"token_type,omitempty"`
 	AccessToken string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 	UserId      int64  `json:"user_id,omitempty"`
 	ClientId    string `json:"client_id,omitempty"`
 	DateCreated string `json:"date_created"`
@@ -74,6 +75,7 @@ func GetNewAccessTokenByUserId(userId int64) *AccessToken {
 	return &AccessToken{
 		TokenType:   TokenTypeBearer,
 		AccessToken: "",
+		RefreshToken: "",
 		UserId:      userId,
 		ClientId:    "",
 		DateCreated: date_utils.GetNowDBFormat(),
@@ -85,6 +87,7 @@ func GetNewAccessTokenByClientId(clientId string) *AccessToken {
 	return &AccessToken{
 		TokenType:   TokenTypeBearer,
 		AccessToken: "",
+		RefreshToken: "",
 		UserId:      0,
 		ClientId:    clientId,
 		DateCreated: date_utils.GetNowDBFormat(),
@@ -93,9 +96,15 @@ func GetNewAccessTokenByClientId(clientId string) *AccessToken {
 }
 
 func (at *AccessToken) Generate() {
+	rand.Seed(time.Now().UnixNano())
+
 	data := make([]byte, accessTokenLength)
 	rand.Read(data)
 	at.AccessToken = fmt.Sprintf("%x", data)
+
+	data = make([]byte, accessTokenLength)
+	rand.Read(data)
+	at.RefreshToken = fmt.Sprintf("%x", data)
 }
 
 func (at AccessToken) IsExpired() bool {
