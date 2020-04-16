@@ -15,7 +15,7 @@ const (
 	accessTokenLength          = 32
 	expirationTime             = 24
 	TokenTypeBearer            = "bearer"
-	GrantTypeClientCredentials = "client_credentials_repo"
+	GrantTypeClientCredentials = "client_credentials"
 	GrantTypeRefreshToken      = "refresh_token"
 )
 
