@@ -2,6 +2,7 @@ package payment_dto
 
 import (
 	"fmt"
+	"github.com/golanshy/plime_core-go/data_models/transaction_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
@@ -98,23 +99,25 @@ func (request *PaymentsRequest) Validate() *rest_errors.RestErr {
 }
 
 type PaymentsResponse struct {
-	Id        string `json:"id"`
-	Reference string `json:"reference"`
-	Details   string `json:"details"`
+	Id          string      `json:"id"`
+	ReferenceId interface{} `json:"reference_id"`
+	Reference   string      `json:"reference"`
+	Details     string      `json:"details"`
 }
 
 type PaymentResult struct {
-	Id             string               `json:"id"`
-	User           user_dto.User        `json:"user"`
-	Reference      string               `json:"reference"`
-	Details        string               `json:"details"`
-	Amount         float64              `json:"amount"`
-	CurrencyCode   string               `json:"currency_code"`
-	SendOn         string               `json:"send_on"`
-	ArriveBy       string               `json:"arrive_by"`
-	Status         string               `json:"status"`
-	FailureDetails string               `json:"failure_details,omitempty"`
-	Error          *rest_errors.RestErr `json:"error,omitempty"`
+	Id                string                      `json:"id"`
+	User              user_dto.User               `json:"user"`
+	Reference         string                      `json:"reference"`
+	Details           string                      `json:"details"`
+	Amount            float64                     `json:"amount"`
+	CurrencyCode      string                      `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	SendOn            string                      `json:"send_on"`
+	ArriveBy          string                      `json:"arrive_by"`
+	Status            string                      `json:"status"`
+	TransactionResult transaction_dto.Transaction `json:"transaction_result"`
+	FailureDetails    string                      `json:"failure_details,omitempty"`
+	Error             *rest_errors.RestErr        `json:"error,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {

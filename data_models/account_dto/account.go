@@ -9,21 +9,20 @@ import (
 )
 
 type Account struct {
-	Id             string              `json:"id"`
-	Email          string              `json:"email"`
-	AccountName    string              `json:"account_name"`
-	AccountType    int                 `json:"account_type"`
-	OwnerFirstName string              `json:"owner_first_name"`
-	OwnerLastName  string              `json:"owner_last_name"`
-	Address        address_dto.Address `json:"address"`
-	Wallets        []wallet_dao.Wallet `json:"wallets"`
+	Id            string               `json:"id"`
+	Email         string               `json:"email"`
+	AccountName   string               `json:"account_name"`
+	AccountType   int                  `json:"account_type"`
+	Active        bool                 `json:"active"`
+	Owner         user_dto.User        `json:"owner"`
+	Address       address_dto.Address  `json:"address"`
+	Wallets       []wallet_dao.Wallet  `json:"wallets"`
+	Beneficiaries []AccountBeneficiary `json:"beneficiaries"`
 }
 
 func (account *Account) Validate() *rest_errors.RestErr {
 	account.Email = strings.TrimSpace(account.Email)
 	account.AccountName = strings.TrimSpace(account.AccountName)
-	account.OwnerFirstName = strings.TrimSpace(account.OwnerFirstName)
-	account.OwnerLastName = strings.TrimSpace(account.OwnerLastName)
 	if account.Email == "" {
 		return rest_errors.NewBadRequestError("invalid email address")
 	}
