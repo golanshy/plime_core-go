@@ -2,6 +2,7 @@ package payment_dto
 
 import (
 	"fmt"
+	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
 	"strings"
@@ -13,17 +14,24 @@ type PaymentsRequest struct {
 	Reference string    `json:"reference"`
 	Details   string    `json:"details"`
 	Payments  []Payment `json:"payments"`
+	WebHook   WebHook   `json:"web_hook"`
 }
 
 type Payment struct {
-	Id           string  `json:"id"`
-	Email        string  `json:"email"`
-	Reference    string  `json:"reference"`
-	Details      string  `json:"details"`
-	Amount       float64 `json:"amount"`
-	CurrencyCode string  `json:"currency_code"`
-	SendOn       string  `json:"send_on"`
-	ArriveBy     string  `json:"arrive_by"`
+	Id           string        `json:"id"`
+	User         user_dto.User `json:"user"`
+	Reference    string        `json:"reference"`
+	Details      string        `json:"details"`
+	Amount       float64       `json:"amount"`
+	CurrencyCode string        `json:"currency_code"`
+	SendOn       string        `json:"send_on"`
+	ArriveBy     string        `json:"arrive_by"`
+}
+
+type WebHook struct {
+	URL      string `json:"url"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func (request *PaymentsRequest) Validate() *rest_errors.RestErr {
@@ -38,13 +46,13 @@ func (request *PaymentsRequest) Validate() *rest_errors.RestErr {
 	}
 
 	for index, payment := range request.Payments {
-		payment.Email = strings.TrimSpace(payment.Email)
 		payment.Reference = strings.TrimSpace(payment.Reference)
 		payment.Details = strings.TrimSpace(payment.Details)
 		payment.ArriveBy = strings.TrimSpace(payment.ArriveBy)
 		payment.SendOn = strings.TrimSpace(payment.SendOn)
 		payment.CurrencyCode = strings.TrimSpace(payment.CurrencyCode)
-		if payment.Email == "" {
+		payment.User.Email = strings.TrimSpace(payment.User.Email)
+		if payment.User.Email == "" {
 			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid email address for payment %d", index))
 		}
 		if payment.Reference == "" {
@@ -90,17 +98,14 @@ func (request *PaymentsRequest) Validate() *rest_errors.RestErr {
 }
 
 type PaymentsResponse struct {
-	Id              string          `json:"id"`
-	Reference       string          `json:"reference"`
-	Details         string          `json:"details"`
-	PaymentsResults []PaymentResult `json:"payments_results"`
-	FailureDetails string               `json:"failure_details"`
-	Error          *rest_errors.RestErr `json:"error"`
+	Id        string `json:"id"`
+	Reference string `json:"reference"`
+	Details   string `json:"details"`
 }
 
 type PaymentResult struct {
 	Id             string               `json:"id"`
-	Email          string               `json:"email"`
+	User           user_dto.User        `json:"user"`
 	Reference      string               `json:"reference"`
 	Details        string               `json:"details"`
 	Amount         float64              `json:"amount"`
@@ -108,8 +113,8 @@ type PaymentResult struct {
 	SendOn         string               `json:"send_on"`
 	ArriveBy       string               `json:"arrive_by"`
 	Status         string               `json:"status"`
-	FailureDetails string               `json:"failure_details"`
-	Error          *rest_errors.RestErr `json:"error"`
+	FailureDetails string               `json:"failure_details,omitempty"`
+	Error          *rest_errors.RestErr `json:"error,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
