@@ -106,18 +106,18 @@ type PaymentsResponse struct {
 }
 
 type PaymentResult struct {
-	Id                string                      `json:"id"`
-	User              user_dto.User               `json:"user"`
-	Reference         string                      `json:"reference"`
-	Details           string                      `json:"details"`
-	Amount            float64                     `json:"amount"`
-	CurrencyCode      string                      `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	SendOn            string                      `json:"send_on"`
-	ArriveBy          string                      `json:"arrive_by"`
-	Status            string                      `json:"status"`
-	TransactionResult transaction_dto.Transaction `json:"transaction_result"`
-	FailureDetails    string                      `json:"failure_details,omitempty"`
-	Error             *rest_errors.RestErr        `json:"error,omitempty"`
+	Id                string                            `json:"id"`
+	User              user_dto.User                     `json:"user"`
+	Reference         string                            `json:"reference"`
+	Details           string                            `json:"details"`
+	Amount            float64                           `json:"amount"`
+	CurrencyCode      string                            `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	SendOn            string                            `json:"send_on"`
+	ArriveBy          string                            `json:"arrive_by"`
+	Status            string                            `json:"status"`
+	TransactionResult transaction_dto.TransactionResult `json:"transaction_result"`
+	FailureDetails    string                            `json:"failure_details,omitempty"`
+	Error             *rest_errors.RestErr              `json:"error,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
