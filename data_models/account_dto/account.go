@@ -10,7 +10,6 @@ import (
 )
 
 type AccountRequest struct {
-	Id          string              `json:"id"`
 	Email       string              `json:"email"`
 	AccountName string              `json:"account_name"`
 	AccountType int                 `json:"account_type"`
