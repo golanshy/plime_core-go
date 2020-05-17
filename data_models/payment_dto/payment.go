@@ -29,6 +29,19 @@ type Payment struct {
 	ArriveBy     string        `json:"arrive_by"`
 }
 
+func (payment *Payment) Validate() *rest_errors.RestErr {
+	if userErr := payment.User.Validate(); userErr != nil {
+		return rest_errors.NewBadRequestError("invalid user data")
+	}
+	if payment.Amount <= 0 {
+		return rest_errors.NewBadRequestError("invalid amount")
+	}
+	if strings.TrimSpace(payment.CurrencyCode) == "" {
+		return rest_errors.NewBadRequestError("invalid currency code")
+	}
+	return nil
+}
+
 type WebHook struct {
 	URL      string `json:"url"`
 	Username string `json:"username"`

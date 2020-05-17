@@ -9,6 +9,23 @@ import (
 	"strings"
 )
 
+type AccountRequest struct {
+	Id          string              `json:"id"`
+	Email       string              `json:"email"`
+	AccountName string              `json:"account_name"`
+	AccountType int                 `json:"account_type"`
+	Owner       user_dto.User       `json:"owner"`
+	Address     address_dto.Address `json:"address"`
+}
+
+func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
+	accountRequest.Email = strings.TrimSpace(accountRequest.Email)
+	if accountRequest.Email == "" {
+		return rest_errors.NewBadRequestError("invalid email address")
+	}
+	return nil
+}
+
 type Account struct {
 	Id            string               `json:"id"`
 	Email         string               `json:"email"`
@@ -52,14 +69,31 @@ type AccountPaymentRequest struct {
 	Payment      payment_dto.Payment `json:"payment"`
 }
 
+func (request *AccountPaymentRequest) Validate() *rest_errors.RestErr {
+	if payerErr := request.PayerAccount.Validate(); payerErr != nil {
+		return rest_errors.NewBadRequestError("invalid payer data")
+	}
+	if payeeErr := request.PayeeAccount.Validate(); payeeErr != nil {
+		return rest_errors.NewBadRequestError("invalid payee data")
+	}
+	if paymentErr := request.Payment.Validate(); paymentErr != nil {
+		return rest_errors.NewBadRequestError("invalid payment data")
+	}
+	return nil
+}
+
 type AccountExchangeRequest struct {
 	Account          Account `json:"payer_account"`
 	Reference        string  `json:"reference"`
 	Details          string  `json:"details"`
 	Amount           float64 `json:"amount"`
-	FromCurrencyCode string  `json:"currency_code"`
-	ToCurrencyCode   string  `json:"currency_code"`
-	ExchangeOn       string  `json:"send_on"`
+	FromCurrencyCode string  `json:"from_currency_code"`
+	ToCurrencyCode   string  `json:"to_currency_code"`
+	ExchangeOn       string  `json:"exchange_on"`
+}
+
+func (request *AccountExchangeRequest) Validate() *rest_errors.RestErr {
+	return nil
 }
 
 type AccountBeneficiary struct {
@@ -69,6 +103,10 @@ type AccountBeneficiary struct {
 
 type AccountBeneficiaryPaymentRequest struct {
 	PayerAccount       Account             `json:"payer_account"`
-	AccountBeneficiary AccountBeneficiary  `json:"payee_account"`
+	AccountBeneficiary AccountBeneficiary  `json:"account_beneficiary"`
 	Payment            payment_dto.Payment `json:"payment"`
+}
+
+func (request *AccountBeneficiaryPaymentRequest) Validate() *rest_errors.RestErr {
+	return nil
 }
