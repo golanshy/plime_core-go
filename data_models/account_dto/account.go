@@ -2,6 +2,7 @@ package account_dto
 
 import (
 	"github.com/golanshy/plime_core-go/data_models/address_dto"
+	"github.com/golanshy/plime_core-go/data_models/payment_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/data_models/wallet_dao"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
@@ -15,6 +16,7 @@ type Account struct {
 	AccountType   int                  `json:"account_type"`
 	Active        bool                 `json:"active"`
 	Owner         user_dto.User        `json:"owner"`
+	Users         []AccountUser        `json:"users"`
 	Address       address_dto.Address  `json:"address"`
 	Wallets       []wallet_dao.Wallet  `json:"wallets"`
 	Beneficiaries []AccountBeneficiary `json:"beneficiaries"`
@@ -34,7 +36,7 @@ func (account *Account) Validate() *rest_errors.RestErr {
 // 1 = Self Employed
 // 2 = Company
 
-type AccountBeneficiary struct {
+type AccountUser struct {
 	User user_dto.User `json:"user"`
 	Role int           `json:"role"`
 }
@@ -43,3 +45,30 @@ type AccountBeneficiary struct {
 // 0 = Viewer
 // 1 = Owner
 // 2 = Editor
+
+type AccountPaymentRequest struct {
+	PayerAccount Account             `json:"payer_account"`
+	PayeeAccount Account             `json:"payee_account"`
+	Payment      payment_dto.Payment `json:"payment"`
+}
+
+type AccountExchangeRequest struct {
+	Account          Account `json:"payer_account"`
+	Reference        string  `json:"reference"`
+	Details          string  `json:"details"`
+	Amount           float64 `json:"amount"`
+	FromCurrencyCode string  `json:"currency_code"`
+	ToCurrencyCode   string  `json:"currency_code"`
+	ExchangeOn       string  `json:"send_on"`
+}
+
+type AccountBeneficiary struct {
+	User    user_dto.User `json:"user"`
+	Account Account       `json:"payer_account"`
+}
+
+type AccountBeneficiaryPaymentRequest struct {
+	PayerAccount       Account             `json:"payer_account"`
+	AccountBeneficiary AccountBeneficiary  `json:"payee_account"`
+	Payment            payment_dto.Payment `json:"payment"`
+}
