@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/golanshy/plime_core-go/data_models/transaction_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
+	"github.com/golanshy/plime_core-go/data_models/wallet_dao"
 	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
 	"strings"
@@ -157,5 +158,30 @@ func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
 	//if request.Email == "" {
 	//	return rest_errors.NewBadRequestError("invalid email address")
 	//}
+	return nil
+}
+
+type WalletPaymentRequest struct {
+	PayerWallet wallet_dao.Wallet `json:"payer_wallet"`
+	PayeeWallet wallet_dao.Wallet `json:"payee_wallet"`
+	Payment     Payment           `json:"payment"`
+}
+
+func (request *WalletPaymentRequest) Validate() *rest_errors.RestErr {
+	if payerErr := request.PayerWallet.Validate(); payerErr != nil {
+		return rest_errors.NewBadRequestError("invalid payer data")
+	}
+	if payeeErr := request.PayerWallet.Validate(); payeeErr != nil {
+		return rest_errors.NewBadRequestError("invalid payee data")
+	}
+	if paymentErr := request.Payment.Validate(); paymentErr != nil {
+		return rest_errors.NewBadRequestError("invalid payment data")
+	}
+	if request.CurrencyCode != request.PayerWallet.CurrencyCode {
+		return rest_errors.NewBadRequestError("payer wallet currency code does not match request")
+	}
+	if request.CurrencyCode != request.PayeeWallet.CurrencyCode {
+		return rest_errors.NewBadRequestError("payee wallet currency code does not match request")
+	}
 	return nil
 }

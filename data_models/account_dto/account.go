@@ -10,11 +10,12 @@ import (
 )
 
 type AccountRequest struct {
-	Email       string              `json:"email"`
-	AccountName string              `json:"account_name"`
-	AccountType int                 `json:"account_type"`
-	Owner       user_dto.User       `json:"owner"`
-	Address     address_dto.Address `json:"address"`
+	Email        string              `json:"email"`
+	AccountName  string              `json:"account_name"`
+	AccountType  int                 `json:"account_type"`
+	CurrencyCode string              `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	Owner        user_dto.User       `json:"owner"`
+	Address      address_dto.Address `json:"address"`
 }
 
 func (accountRequest *AccountRequest) Trim() {
@@ -68,25 +69,6 @@ type AccountUser struct {
 // 0 = Viewer
 // 1 = Owner
 // 2 = Editor
-
-type AccountPaymentRequest struct {
-	PayerAccount Account             `json:"payer_account"`
-	PayeeAccount Account             `json:"payee_account"`
-	Payment      payment_dto.Payment `json:"payment"`
-}
-
-func (request *AccountPaymentRequest) Validate() *rest_errors.RestErr {
-	if payerErr := request.PayerAccount.Validate(); payerErr != nil {
-		return rest_errors.NewBadRequestError("invalid payer data")
-	}
-	if payeeErr := request.PayeeAccount.Validate(); payeeErr != nil {
-		return rest_errors.NewBadRequestError("invalid payee data")
-	}
-	if paymentErr := request.Payment.Validate(); paymentErr != nil {
-		return rest_errors.NewBadRequestError("invalid payment data")
-	}
-	return nil
-}
 
 type AccountExchangeRequest struct {
 	Account          Account `json:"payer_account"`
