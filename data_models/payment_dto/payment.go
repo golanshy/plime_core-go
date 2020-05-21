@@ -177,10 +177,10 @@ func (request *WalletPaymentRequest) Validate() *rest_errors.RestErr {
 	if paymentErr := request.Payment.Validate(); paymentErr != nil {
 		return rest_errors.NewBadRequestError("invalid payment data")
 	}
-	if request.CurrencyCode != request.PayerWallet.CurrencyCode {
+	if request.Payment.CurrencyCode != request.PayerWallet.CurrencyCode {
 		return rest_errors.NewBadRequestError("payer wallet currency code does not match request")
 	}
-	if request.CurrencyCode != request.PayeeWallet.CurrencyCode {
+	if request.Payment.CurrencyCode != request.PayeeWallet.CurrencyCode {
 		return rest_errors.NewBadRequestError("payee wallet currency code does not match request")
 	}
 	return nil
