@@ -33,6 +33,7 @@ type AccessTokenRequest struct {
 	ClientSecret string `json:"client_secret"`
 
 	// User for refresh_token grant type
+	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
 
@@ -49,7 +50,14 @@ func (request *AccessTokenRequest) Validate() *rest_errors.RestErr {
 		}
 		break
 	case GrantTypeRefreshToken:
-		// No fields to validate
+		if request.AccessToken == "" {
+			logger.Error("error when trying to validate client_credentials_repo invalid access_token", nil)
+			return rest_errors.NewBadRequestError("invalid access token")
+		}
+		if request.RefreshToken == "" {
+			logger.Error("error when trying to validate client_credentials_repo invalid refresh_token", nil)
+			return rest_errors.NewBadRequestError("invalid refresh token")
+		}
 		break
 	default:
 		logger.Error("error when trying to validate client_credentials_repo", nil)

@@ -21,6 +21,7 @@ type PaymentsRequest struct {
 type Payment struct {
 	Id           string        `json:"id"`
 	User         user_dto.User `json:"user"`
+	UserSecrets  []UserSecret  `json:"user_secrets"`
 	Reference    string        `json:"reference"`
 	Details      string        `json:"details"`
 	Amount       float64       `json:"amount"`
@@ -39,6 +40,19 @@ func (payment *Payment) Validate() *rest_errors.RestErr {
 	if strings.TrimSpace(payment.CurrencyCode) == "" {
 		return rest_errors.NewBadRequestError("invalid currency code")
 	}
+	if len(payment.UserSecrets) > 0 {
+		for _, secret := range payment.UserSecrets {
+			if strings.TrimSpace(secret.Key) == "" {
+				return rest_errors.NewBadRequestError("invalid user secret key")
+			}
+			if strings.TrimSpace(secret.Human) == "" {
+				return rest_errors.NewBadRequestError("invalid user secret human")
+			}
+			if strings.TrimSpace(secret.Value) == "" {
+				return rest_errors.NewBadRequestError("invalid user secret value")
+			}
+		}
+	}
 	return nil
 }
 
@@ -46,6 +60,12 @@ type WebHook struct {
 	URL      string `json:"url"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+type UserSecret struct {
+	Key   string `json:"key"`
+	Human string `json:"human"`
+	Value string `json:"value"`
 }
 
 func (request *PaymentsRequest) Validate() *rest_errors.RestErr {

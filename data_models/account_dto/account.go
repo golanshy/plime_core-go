@@ -17,8 +17,15 @@ type AccountRequest struct {
 	Address     address_dto.Address `json:"address"`
 }
 
-func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
+func (accountRequest *AccountRequest) Trim() {
 	accountRequest.Email = strings.TrimSpace(accountRequest.Email)
+	accountRequest.AccountName = strings.TrimSpace(accountRequest.AccountName)
+	accountRequest.Owner.Trim()
+	accountRequest.Address.Trim()
+}
+
+func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
+	accountRequest.Trim()
 	if accountRequest.Email == "" {
 		return rest_errors.NewBadRequestError("invalid email address")
 	}
