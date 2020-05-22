@@ -2,6 +2,7 @@ package rails_bank_error_dto
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
 )
 
@@ -12,7 +13,7 @@ type RailsBankError struct {
 
 func NewRestErrorFromBytes(bytes []byte) (*rest_errors.RestErr, error) {
 
-	var apiError error_dto.RailsBankError
+	var apiError RailsBankError
 	if err := json.Unmarshal(bytes, &apiError); err != nil {
 		return nil, errors.New("invalid json")
 	}
