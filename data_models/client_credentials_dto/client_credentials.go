@@ -11,7 +11,7 @@ import (
 
 const (
 	GrantTypeClientCredentials = "client_credentials"
-	SecretLength               = 8
+	SecretLength               = 32
 	ClientIdLength             = 16
 )
 
