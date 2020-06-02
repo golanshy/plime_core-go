@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	expirationTime = 5
+	expirationTime = 15
 )
 
 type MobileCode struct {
