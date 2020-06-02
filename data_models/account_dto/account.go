@@ -2,6 +2,7 @@ package account_dto
 
 import (
 	"github.com/golanshy/plime_core-go/data_models/address_dto"
+	"github.com/golanshy/plime_core-go/data_models/kyc_dto"
 	"github.com/golanshy/plime_core-go/data_models/payment_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/data_models/wallet_dao"
@@ -39,6 +40,9 @@ type Account struct {
 	AccountName   string               `json:"account_name"`
 	AccountType   int                  `json:"account_type"`
 	Active        bool                 `json:"active"`
+	KycStatus     *kyc_dto.KycStatus   `json:"kyc_status"`
+	Details       string               `json:"details"`
+	Notes         string               `json:"notes"`
 	Owner         user_dto.User        `json:"owner"`
 	Users         []AccountUser        `json:"users"`
 	Address       address_dto.Address  `json:"address"`
