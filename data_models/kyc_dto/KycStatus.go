@@ -31,18 +31,18 @@ const (
 )
 
 type KycStatus struct {
-	Status        string        `json:"status"`
-	LevelApproved int           `json:"level_approved"`
+	Status        string        `json:"status,omitempty"`
+	LevelApproved int           `json:"level_approved,omitempty"`
 	Documents     []KycDocument `json:"documents,omitempty"`
 }
 
 type KycDocument struct {
-	Name     string   `json:"name"`
+	Name     string   `json:"name,omitempty"`
 	Quantity int      `json:"quantity"`
-	Types    []string `json:"types"`
-	Status   string   `json:"status"`
-	Required bool     `json:"required"`
-	Details  string   `json:"details"`
+	Types    []string `json:"types,omitempty"`
+	Status   string   `json:"status,omitempty"`
+	Required bool     `json:"required,omitempty"`
+	Details  string   `json:"details,omitempty"`
 }
 
 func NewKycStatus() *KycStatus {

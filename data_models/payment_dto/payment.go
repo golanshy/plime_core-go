@@ -13,24 +13,24 @@ import (
 
 type PaymentsRequest struct {
 	Id          string    `json:"id"`
-	Reference   string    `json:"reference"`
-	Details     string    `json:"details"`
-	Payments    []Payment `json:"payments"`
-	WebHook     WebHook   `json:"web_hook"`
-	DateCreated string    `json:"date_created"`
+	Reference   string    `json:"reference,omitempty"`
+	Details     string    `json:"details,omitempty"`
+	Payments    []Payment `json:"payments,omitempty"`
+	WebHook     WebHook   `json:"web_hook,omitempty"`
+	DateCreated string    `json:"date_created,omitempty"`
 }
 
 type Payment struct {
-	Id           string        `json:"id"`
-	Payee        user_dto.User `json:"payee"`
-	UserSecrets  []UserSecret  `json:"user_secrets"`
-	Reference    string        `json:"reference"`
-	Details      string        `json:"details"`
-	Amount       float64       `json:"amount"`
-	CurrencyCode string        `json:"currency_code"`
-	SendOn       string        `json:"send_on"`
-	ArriveBy     string        `json:"arrive_by"`
-	DateCreated  string        `json:"date_created"`
+	Id           string        `json:"id,omitempty"`
+	Payee        user_dto.User `json:"payee,omitempty"`
+	UserSecrets  []UserSecret  `json:"user_secrets,omitempty"`
+	Reference    string        `json:"reference,omitempty"`
+	Details      string        `json:"details,omitempty"`
+	Amount       float64       `json:"amount,omitempty"`
+	CurrencyCode string        `json:"currency_code,omitempty"`
+	SendOn       string        `json:"send_on,omitempty"`
+	ArriveBy     string        `json:"arrive_by,omitempty"`
+	DateCreated  string        `json:"date_created,omitempty"`
 }
 
 func (payment *Payment) Validate() *rest_errors.RestErr {
@@ -61,8 +61,8 @@ func (payment *Payment) Validate() *rest_errors.RestErr {
 
 type WebHook struct {
 	URL      string `json:"url"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type UserSecret struct {
@@ -133,27 +133,27 @@ func (request *PaymentsRequest) Validate() *rest_errors.RestErr {
 
 type PaymentsResponse struct {
 	Id          string      `json:"id"`
-	ReferenceId interface{} `json:"reference_id"`
-	Reference   string      `json:"reference"`
-	Details     string      `json:"details"`
-	DateCreated string      `json:"date_created"`
+	ReferenceId interface{} `json:"reference_id,omitempty"`
+	Reference   string      `json:"reference,omitempty"`
+	Details     string      `json:"details,omitempty"`
+	DateCreated string      `json:"date_created,omitempty"`
 }
 
 type PaymentResult struct {
 	Id                string                            `json:"id"`
 	Payer             user_dto.User                     `json:"payer"`
 	Payee             user_dto.User                     `json:"payee"`
-	Reference         string                            `json:"reference"`
-	Details           string                            `json:"details"`
+	Reference         string                            `json:"reference,omitempty"`
+	Details           string                            `json:"details,omitempty"`
 	Amount            float64                           `json:"amount"`
 	CurrencyCode      string                            `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	SendOn            string                            `json:"send_on"`
-	ArriveBy          string                            `json:"arrive_by"`
+	SendOn            string                            `json:"send_on,omitempty"`
+	ArriveBy          string                            `json:"arrive_by,omitempty"`
 	Status            string                            `json:"status"`
-	TransactionResult transaction_dto.TransactionResult `json:"transaction_result"`
+	TransactionResult transaction_dto.TransactionResult `json:"transaction_result,omitempty"`
 	FailureDetails    string                            `json:"failure_details,omitempty"`
 	Error             *rest_errors.RestErr              `json:"error,omitempty"`
-	DateCreated       string                            `json:"date_created"`
+	DateCreated       string                            `json:"date_created,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {

@@ -12,18 +12,18 @@ const (
 
 type User struct {
 	Id              int64               `json:"id"`
-	FirstName       string              `json:"first_name"`
-	LastName        string              `json:"last_name"`
-	Email           string              `json:"email"`
-	DateOfBirth     string              `json:"date_of_birth"`
-	Mobile          string              `json:"mobile"`
-	CountryCode     string              `json:"country_code"`
-	DateCreated     string              `json:"date_created"`
-	Status          string              `json:"status"`
-	Passcode        string              `json:"passcode"`
-	EmailValidated  bool                `json:"email_validated"`
-	MobileValidated bool                `json:"mobile_validated"`
-	Address         address_dto.Address `json:"address"`
+	FirstName       string              `json:"first_name,omitempty"`
+	LastName        string              `json:"last_name,omitempty"`
+	Email           string              `json:"email,omitempty"`
+	DateOfBirth     string              `json:"date_of_birth,omitempty"`
+	Mobile          string              `json:"mobile,omitempty"`
+	CountryCode     string              `json:"country_code,omitempty"`
+	DateCreated     string              `json:"date_created,omitempty"`
+	Status          string              `json:"status,omitempty"`
+	Passcode        string              `json:"passcode,omitempty"`
+	EmailValidated  bool                `json:"email_validated,omitempty"`
+	MobileValidated bool                `json:"mobile_validated,omitempty"`
+	Address         address_dto.Address `json:"address,omitempty"`
 }
 
 type Users []User

@@ -36,18 +36,18 @@ func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
 
 type Account struct {
 	Id            string               `json:"id"`
-	Email         string               `json:"email"`
-	AccountName   string               `json:"account_name"`
-	AccountType   int                  `json:"account_type"`
-	Active        bool                 `json:"active"`
-	KycStatus     *kyc_dto.KycStatus   `json:"kyc_status"`
-	Details       string               `json:"details"`
-	Notes         string               `json:"notes"`
-	Owner         user_dto.User        `json:"owner"`
-	Users         []AccountUser        `json:"users"`
-	Address       address_dto.Address  `json:"address"`
-	Wallets       []wallet_dao.Wallet  `json:"wallets"`
-	Beneficiaries []AccountBeneficiary `json:"beneficiaries"`
+	Email         string               `json:"email,omitempty"`
+	AccountName   string               `json:"account_name,omitempty"`
+	AccountType   int                  `json:"account_type,omitempty"`
+	Active        bool                 `json:"active,omitempty"`
+	KycStatus     *kyc_dto.KycStatus   `json:"kyc_status,omitempty"`
+	Details       string               `json:"details,omitempty"`
+	Notes         string               `json:"notes,omitempty"`
+	Owner         user_dto.User        `json:"owner,omitempty"`
+	Users         []AccountUser        `json:"users,omitempty"`
+	Address       address_dto.Address  `json:"address,omitempty"`
+	Wallets       []wallet_dao.Wallet  `json:"wallets,omitempty"`
+	Beneficiaries []AccountBeneficiary `json:"beneficiaries,omitempty"`
 }
 
 func (account *Account) Validate() *rest_errors.RestErr {
@@ -75,13 +75,13 @@ type AccountUser struct {
 // 2 = Editor
 
 type AccountExchangeRequest struct {
-	Account          Account `json:"payer_account"`
-	Reference        string  `json:"reference"`
-	Details          string  `json:"details"`
-	Amount           float64 `json:"amount"`
-	FromCurrencyCode string  `json:"from_currency_code"`
-	ToCurrencyCode   string  `json:"to_currency_code"`
-	ExchangeOn       string  `json:"exchange_on"`
+	Account          Account `json:"payer_account,omitempty"`
+	Reference        string  `json:"reference,omitempty"`
+	Details          string  `json:"details,omitempty"`
+	Amount           float64 `json:"amount,omitempty"`
+	FromCurrencyCode string  `json:"from_currency_code,omitempty"`
+	ToCurrencyCode   string  `json:"to_currency_code,omitempty"`
+	ExchangeOn       string  `json:"exchange_on,omitempty"`
 }
 
 func (request *AccountExchangeRequest) Validate() *rest_errors.RestErr {
@@ -94,9 +94,9 @@ type AccountBeneficiary struct {
 }
 
 type AccountBeneficiaryPaymentRequest struct {
-	PayerAccount       Account             `json:"payer_account"`
-	AccountBeneficiary AccountBeneficiary  `json:"account_beneficiary"`
-	Payment            payment_dto.Payment `json:"payment"`
+	PayerAccount       Account             `json:"payer_account,omitempty"`
+	AccountBeneficiary AccountBeneficiary  `json:"account_beneficiary,omitempty"`
+	Payment            payment_dto.Payment `json:"payment,omitempty"`
 }
 
 func (request *AccountBeneficiaryPaymentRequest) Validate() *rest_errors.RestErr {

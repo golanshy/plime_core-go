@@ -10,7 +10,7 @@ type RestErr struct {
 	Message string        `json:"message"`
 	Status  int           `json:"status"`
 	Error   string        `json:"error"`
-	Causes  []interface{} `json:"causes"`
+	Causes  []interface{} `json:"causes,omitempty"`
 }
 
 func NewRestErrorFromBytes(bytes []byte) (*RestErr, error) {
@@ -77,6 +77,3 @@ func NewConflictError(message string) *RestErr {
 		Error:   "conflict_error",
 	}
 }
-
-
-
