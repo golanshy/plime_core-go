@@ -22,7 +22,6 @@ type PaymentsRequest struct {
 
 type Payment struct {
 	Id           string        `json:"id"`
-	Payer        user_dto.User `json:"payer"`
 	Payee        user_dto.User `json:"payee"`
 	UserSecrets  []UserSecret  `json:"user_secrets"`
 	Reference    string        `json:"reference"`
@@ -35,9 +34,6 @@ type Payment struct {
 }
 
 func (payment *Payment) Validate() *rest_errors.RestErr {
-	if userErr := payment.Payer.Validate(); userErr != nil {
-		return rest_errors.NewBadRequestError("invalid payer data")
-	}
 	if userErr := payment.Payee.Validate(); userErr != nil {
 		return rest_errors.NewBadRequestError("invalid payee data")
 	}
@@ -145,7 +141,8 @@ type PaymentsResponse struct {
 
 type PaymentResult struct {
 	Id                string                            `json:"id"`
-	User              user_dto.User                     `json:"user"`
+	Payer             user_dto.User                     `json:"payer"`
+	Payee             user_dto.User                     `json:"payee"`
 	Reference         string                            `json:"reference"`
 	Details           string                            `json:"details"`
 	Amount            float64                           `json:"amount"`
