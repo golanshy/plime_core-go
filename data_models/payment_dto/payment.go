@@ -12,16 +12,18 @@ import (
 )
 
 type PaymentsRequest struct {
-	Id        string    `json:"id"`
-	Reference string    `json:"reference"`
-	Details   string    `json:"details"`
-	Payments  []Payment `json:"payments"`
-	WebHook   WebHook   `json:"web_hook"`
+	Id          string    `json:"id"`
+	Reference   string    `json:"reference"`
+	Details     string    `json:"details"`
+	Payments    []Payment `json:"payments"`
+	WebHook     WebHook   `json:"web_hook"`
+	DateCreated string    `json:"date_created"`
 }
 
 type Payment struct {
 	Id           string        `json:"id"`
-	User         user_dto.User `json:"user"`
+	Payer        user_dto.User `json:"payer"`
+	Payee        user_dto.User `json:"payee"`
 	UserSecrets  []UserSecret  `json:"user_secrets"`
 	Reference    string        `json:"reference"`
 	Details      string        `json:"details"`
@@ -29,28 +31,32 @@ type Payment struct {
 	CurrencyCode string        `json:"currency_code"`
 	SendOn       string        `json:"send_on"`
 	ArriveBy     string        `json:"arrive_by"`
+	DateCreated  string        `json:"date_created"`
 }
 
 func (payment *Payment) Validate() *rest_errors.RestErr {
-	if userErr := payment.User.Validate(); userErr != nil {
-		return rest_errors.NewBadRequestError("invalid user data")
+	if userErr := payment.Payer.Validate(); userErr != nil {
+		return rest_errors.NewBadRequestError("invalid payer data")
+	}
+	if userErr := payment.Payee.Validate(); userErr != nil {
+		return rest_errors.NewBadRequestError("invalid payee data")
 	}
 	if payment.Amount <= 0 {
 		return rest_errors.NewBadRequestError("invalid amount")
 	}
 	if strings.TrimSpace(payment.CurrencyCode) == "" {
-		return rest_errors.NewBadRequestError("invalid currency code")
+		return rest_errors.NewBadRequestError("invalid currency code field")
 	}
 	if len(payment.UserSecrets) > 0 {
 		for _, secret := range payment.UserSecrets {
 			if strings.TrimSpace(secret.Key) == "" {
-				return rest_errors.NewBadRequestError("invalid user secret key")
+				return rest_errors.NewBadRequestError("invalid user secret key field")
 			}
 			if strings.TrimSpace(secret.Human) == "" {
-				return rest_errors.NewBadRequestError("invalid user secret human")
+				return rest_errors.NewBadRequestError("invalid user secret human field")
 			}
 			if strings.TrimSpace(secret.Value) == "" {
-				return rest_errors.NewBadRequestError("invalid user secret value")
+				return rest_errors.NewBadRequestError("invalid user secret value field")
 			}
 		}
 	}
@@ -86,12 +92,9 @@ func (request *PaymentsRequest) Validate() *rest_errors.RestErr {
 		payment.ArriveBy = strings.TrimSpace(payment.ArriveBy)
 		payment.SendOn = strings.TrimSpace(payment.SendOn)
 		payment.CurrencyCode = strings.TrimSpace(payment.CurrencyCode)
-		payment.User.Email = strings.TrimSpace(payment.User.Email)
-		if payment.User.Email == "" {
-			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid email address for payment %d", index))
-		}
-		if payment.Reference == "" {
-			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid reference data for payment %d", index))
+		payment.Payee.Email = strings.TrimSpace(payment.Payee.Email)
+		if payment.Payee.Email == "" {
+			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid payee email address for payment %d", index))
 		}
 		if payment.Amount <= 0 {
 			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid amount for payment %d", index))
@@ -137,6 +140,7 @@ type PaymentsResponse struct {
 	ReferenceId interface{} `json:"reference_id"`
 	Reference   string      `json:"reference"`
 	Details     string      `json:"details"`
+	DateCreated string      `json:"date_created"`
 }
 
 type PaymentResult struct {
@@ -152,6 +156,7 @@ type PaymentResult struct {
 	TransactionResult transaction_dto.TransactionResult `json:"transaction_result"`
 	FailureDetails    string                            `json:"failure_details,omitempty"`
 	Error             *rest_errors.RestErr              `json:"error,omitempty"`
+	DateCreated       string                            `json:"date_created"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {

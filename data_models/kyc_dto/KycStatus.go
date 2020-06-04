@@ -33,7 +33,7 @@ const (
 type KycStatus struct {
 	Status        string        `json:"status"`
 	LevelApproved int           `json:"level_approved"`
-	Documents     []KycDocument `json:"documents"`
+	Documents     []KycDocument `json:"documents,omitempty"`
 }
 
 type KycDocument struct {
