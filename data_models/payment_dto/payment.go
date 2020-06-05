@@ -150,7 +150,7 @@ type PaymentResult struct {
 	SendOn            string                            `json:"send_on,omitempty"`
 	ArriveBy          string                            `json:"arrive_by,omitempty"`
 	Status            string                            `json:"status"`
-	TransactionResult transaction_dto.TransactionResult `json:"transaction_result,omitempty"`
+	TransactionResult *transaction_dto.TransactionResult `json:"transaction_result,omitempty"`
 	FailureDetails    string                            `json:"failure_details,omitempty"`
 	Error             *rest_errors.RestErr              `json:"error,omitempty"`
 	DateCreated       string                            `json:"date_created,omitempty"`
@@ -173,7 +173,7 @@ func (request *WalletPaymentRequest) Validate() *rest_errors.RestErr {
 	if payerErr := request.PayerWallet.Validate(); payerErr != nil {
 		return rest_errors.NewBadRequestError("invalid payer data")
 	}
-	if payeeErr := request.PayerWallet.Validate(); payeeErr != nil {
+	if payeeErr := request.PayeeWallet.Validate(); payeeErr != nil {
 		return rest_errors.NewBadRequestError("invalid payee data")
 	}
 	if paymentErr := request.Payment.Validate(); paymentErr != nil {

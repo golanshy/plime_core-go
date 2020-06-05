@@ -16,7 +16,7 @@ type TransactionResult struct {
 	AmountLocalCurrency float64                                                 `json:"amount_local_currency,omitempty"`
 	PayerWalletId       string                                                  `json:"payer_wallet_id"`
 	PayeeWalletId       string                                                  `json:"payee_wallet_id"`
-	Details             rails_bank_transaction_dto.RailsBankTransactionResponse `json:"details,omitempty"`
+	Details             *rails_bank_transaction_dto.RailsBankTransactionResponse `json:"details,omitempty"`
 }
 
 const (
