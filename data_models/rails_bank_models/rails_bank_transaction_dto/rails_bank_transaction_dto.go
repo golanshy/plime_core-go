@@ -65,5 +65,6 @@ type RailsBankTransactionPrintout struct {
 type TransactionsResultsResponse struct {
 	Start   int64                           `json:"start"`
 	Limit   int64                           `json:"limit"`
+	Hits    int64                           `json:"hits"`
 	Results *[]RailsBankTransactionResponse `json:"results,omitempty"`
 }
