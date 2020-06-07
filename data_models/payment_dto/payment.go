@@ -191,6 +191,7 @@ func (request *WalletPaymentRequest) Validate() *rest_errors.RestErr {
 type PaymentResultsResponse struct {
 	Start   int64            `json:"start"`
 	Limit   int64            `json:"limit"`
+	Hits    int64            `json:"hits"`
 	Total   int64            `json:"total"`
 	Results *[]PaymentResult `json:"results,omitempty"`
 }
