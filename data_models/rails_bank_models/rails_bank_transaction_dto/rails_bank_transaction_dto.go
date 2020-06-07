@@ -61,3 +61,9 @@ type RailsBankTransactionPrintout struct {
 	BeneficiaryName                       string  `json:"beneficiaryname"`
 	PaymentPartyType                      string  `json:"paymentpartytype"`
 }
+
+type TransactionsResultsResponse struct {
+	Start   int64                           `json:"start"`
+	Limit   int64                           `json:"limit"`
+	Results *[]RailsBankTransactionResponse `json:"results,omitempty"`
+}
