@@ -1,5 +1,7 @@
 package rails_bank_transaction_dto
 
+import "time"
+
 type RailsBankInterLedgerTransactionRequest struct {
 	Amount        float64 `json:"amount"`
 	PayerWalletID string  `json:"ledger_from_id"`
@@ -14,7 +16,7 @@ type RailsBankTransactionResponse struct {
 	TransactionId            string                       `json:"transaction_id"`
 	TransactionStatus        string                       `json:"transaction_status"`
 	TransactionType          string                       `json:"transaction_type"`
-	CreatedAt                string                       `json:"created_at"`
+	CreatedAt                *time.Time                   `json:"created_at"`
 	PartnerProduct           string                       `json:"partner_product"`
 	TransactionFee           float64                      `json:"transaction_fee"`
 	AssetClass               string                       `json:"asset_class"`

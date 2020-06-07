@@ -12,12 +12,12 @@ import (
 )
 
 type PaymentsRequest struct {
-	Id          string    `json:"id"`
-	Reference   string    `json:"reference,omitempty"`
-	Details     string    `json:"details,omitempty"`
-	Payments    []Payment `json:"payments,omitempty"`
-	WebHook     WebHook   `json:"web_hook,omitempty"`
-	DateCreated string    `json:"date_created,omitempty"`
+	Id          string     `json:"id"`
+	Reference   string     `json:"reference,omitempty"`
+	Details     string     `json:"details,omitempty"`
+	Payments    []Payment  `json:"payments,omitempty"`
+	WebHook     WebHook    `json:"web_hook,omitempty"`
+	DateCreated *time.Time `json:"date_created,omitempty"`
 }
 
 type Payment struct {
@@ -30,7 +30,7 @@ type Payment struct {
 	CurrencyCode string        `json:"currency_code,omitempty"`
 	SendOn       string        `json:"send_on,omitempty"`
 	ArriveBy     string        `json:"arrive_by,omitempty"`
-	DateCreated  string        `json:"date_created,omitempty"`
+	DateCreated  *time.Time    `json:"date_created,omitempty"`
 }
 
 func (payment *Payment) Validate() *rest_errors.RestErr {
@@ -136,24 +136,24 @@ type PaymentsResponse struct {
 	ReferenceId interface{} `json:"reference_id,omitempty"`
 	Reference   string      `json:"reference,omitempty"`
 	Details     string      `json:"details,omitempty"`
-	DateCreated string      `json:"date_created,omitempty"`
+	DateCreated *time.Time  `json:"date_created,omitempty"`
 }
 
 type PaymentResult struct {
-	Id                string                            `json:"id"`
-	Payer             user_dto.User                     `json:"payer"`
-	Payee             user_dto.User                     `json:"payee"`
-	Reference         string                            `json:"reference,omitempty"`
-	Details           string                            `json:"details,omitempty"`
-	Amount            float64                           `json:"amount"`
-	CurrencyCode      string                            `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	SendOn            string                            `json:"send_on,omitempty"`
-	ArriveBy          string                            `json:"arrive_by,omitempty"`
-	Status            string                            `json:"status"`
+	Id                string                             `json:"id"`
+	Payer             user_dto.User                      `json:"payer"`
+	Payee             user_dto.User                      `json:"payee"`
+	Reference         string                             `json:"reference,omitempty"`
+	Details           string                             `json:"details,omitempty"`
+	Amount            float64                            `json:"amount"`
+	CurrencyCode      string                             `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	SendOn            string                             `json:"send_on,omitempty"`
+	ArriveBy          string                             `json:"arrive_by,omitempty"`
+	Status            string                             `json:"status"`
 	TransactionResult *transaction_dto.TransactionResult `json:"transaction_result,omitempty"`
-	FailureDetails    string                            `json:"failure_details,omitempty"`
-	Error             *rest_errors.RestErr              `json:"error,omitempty"`
-	DateCreated       string                            `json:"date_created,omitempty"`
+	FailureDetails    string                             `json:"failure_details,omitempty"`
+	Error             *rest_errors.RestErr               `json:"error,omitempty"`
+	DateCreated       *time.Time                         `json:"date_created,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
