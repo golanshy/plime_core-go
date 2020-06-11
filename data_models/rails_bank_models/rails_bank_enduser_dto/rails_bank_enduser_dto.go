@@ -13,7 +13,7 @@ type RailsBankEndUserResponse struct {
 	Person                   RailsBankPerson                           `json:"person,omitempty"`
 	CreatedAt                string                                    `json:"created_at,omitempty"`
 	LastModifiedAt           string                                    `json:"last_modified_at,omitempty"`
-	ScreeningMonitoredSearch string                                    `json:"screening_monitored_search,omitempty"`
+	ScreeningMonitoredSearch bool                                      `json:"screening_monitored_search,omitempty"`
 }
 
 type RailsBankPerson struct {
