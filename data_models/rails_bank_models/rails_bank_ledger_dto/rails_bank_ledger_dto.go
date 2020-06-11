@@ -13,6 +13,10 @@ type RailsBankLedgerRequest struct {
 	PartnerProduct        string   `json:"partner_product"`
 }
 
+type RailsBankLedgerId struct {
+	LedgerId string `json:"ledger_id"`
+}
+
 type RailsBankLedgerResponse struct {
 	LedgerId        string     `json:"ledger_id"`
 	HolderId        string     `json:"holder_id"`
