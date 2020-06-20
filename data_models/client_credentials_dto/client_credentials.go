@@ -3,6 +3,7 @@ package client_credentials_dto
 import (
 	"fmt"
 	"github.com/golanshy/plime_core-go/utils/crypto_utils"
+	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
 	"math/rand"
 	"strings"
@@ -47,7 +48,7 @@ func NewClientCredentials(request ClientCredentialsCreateRequest) ClientCredenti
 		AppDetails:   request.AppDetails,
 		ClientSecret: crypto_utils.GenerateSecret(SecretLength),
 		GrantType:    GrantTypeClientCredentials,
-		DateCreated:  time.Now().UTC().Unix(),
+		DateCreated:  date_utils.GetNowDBFormat(),
 	}
 }
 
@@ -80,7 +81,7 @@ type ClientCredentials struct {
 	AppName      string `json:"app_name"`
 	AppDetails   string `json:"app_details"`
 	ClientSecret string `json:"client_secret"`
-	DateCreated  int64  `json:"date_created"`
+	DateCreated  string  `json:"date_created"`
 }
 
 func (credentials *ClientCredentials) Validate() *rest_errors.RestErr {
