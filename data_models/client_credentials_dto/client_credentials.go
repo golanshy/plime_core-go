@@ -110,7 +110,7 @@ func (credentials *ClientCredentials) Validate() *rest_errors.RestErr {
 	if credentials.GrantType == "" {
 		return rest_errors.NewBadRequestError("invalid grant_type")
 	}
-	if credentials.DateCreated <= 0 {
+	if credentials.DateCreated != "" {
 		return rest_errors.NewBadRequestError("invalid date_created")
 	}
 	return nil
