@@ -31,13 +31,14 @@ const (
 )
 
 type KycStatus struct {
+	UserId        int64        `json:"user_id,omitempty"`
 	Status        string        `json:"status,omitempty"`
 	LevelApproved int           `json:"level_approved,omitempty"`
 	Documents     []KycDocument `json:"documents,omitempty"`
 }
 
 type KycDocument struct {
-	Name     string   `json:"name,omitempty"`
+	Name     string    `json:"name,omitempty"`
 	Quantity int      `json:"quantity"`
 	Types    []string `json:"types,omitempty"`
 	Status   string   `json:"status,omitempty"`
@@ -45,12 +46,60 @@ type KycDocument struct {
 	Details  string   `json:"details,omitempty"`
 }
 
-func NewKycStatus() *KycStatus {
-	return &KycStatus{
+func NewKycStatus(userId int64) *KycStatus {
+	newKyc := &KycStatus{
+		UserId:        userId,
 		Status:        KycNotStarted,
 		LevelApproved: KycLevel0,
 		Documents:     make([]KycDocument, 0),
 	}
+	typeId := make([]string, 0)
+	typeSelfie := make([]string, 0)
+	typeVideoSelfie := make([]string, 0)
+	typeProofOfAddress := make([]string, 0)
+
+	typeId = append(typeId, DocumentTypePassport)
+	typeId = append(typeId, DocumentTypeDrivingLicence)
+	typeId = append(typeId, DocumentTypePhotoId)
+
+	typeSelfie = append(typeSelfie, DocumentTypeSelfie)
+	typeVideoSelfie = append(typeVideoSelfie, DocumentTypeSelfieVideo)
+	typeProofOfAddress = append(typeProofOfAddress, DocumentTypeProofOfAddress)
+
+	newKyc.Documents = append(newKyc.Documents, KycDocument{
+		Name:     "Passport or Driving licence",
+		Quantity: 2,
+		Types:    typeId,
+		Status:   DocumentStatusRequired,
+		Required: true,
+		Details:  "",
+	})
+	newKyc.Documents = append(newKyc.Documents, KycDocument{
+		Name:     "Selfie",
+		Quantity: 1,
+		Types:    typeSelfie,
+		Status:   DocumentStatusRequired,
+		Required: true,
+		Details:  "",
+	})
+	newKyc.Documents = append(newKyc.Documents, KycDocument{
+		Name:     "Video selfie",
+		Quantity: 1,
+		Types:    typeVideoSelfie,
+		Status:   DocumentStatusRequired,
+		Required: false,
+		Details:  "",
+	})
+	newKyc.Documents = append(newKyc.Documents, KycDocument{
+		Name:     "Proof of address",
+		Quantity: 1,
+		Types:    typeProofOfAddress,
+		Status:   DocumentStatusRequired,
+		Required: false,
+		Details:  "",
+	})
+
+	return newKyc
 }
 
 func NewKycDocument() *KycDocument {
