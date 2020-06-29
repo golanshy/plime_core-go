@@ -23,6 +23,7 @@ type User struct {
 	Passcode        string              `json:"passcode,omitempty"`
 	EmailValidated  bool                `json:"email_validated,omitempty"`
 	MobileValidated bool                `json:"mobile_validated,omitempty"`
+	Type            int64               `json:"type,omitempty"`
 	Address         address_dto.Address `json:"address,omitempty"`
 }
 
