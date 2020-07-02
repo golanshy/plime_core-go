@@ -54,7 +54,6 @@ func NewKycDocuments() *KycDocuments {
 	newKyc.Documents = append(newKyc.Documents, KycDocument{
 		Name:     "Selfie",
 		Types:    typeSelfie,
-		Status:   DocumentStatusRequired,
 		Required: true,
 		Details:  "",
 	})
