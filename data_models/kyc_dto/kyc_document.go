@@ -1,6 +1,8 @@
 package kyc_dto
 
 const (
+	DataTypeString             string = "data_type_string"
+	DataTypeInt             string = "data_type_int"
 	DocumentTypePassport       string = "document_type_passport"
 	DocumentTypeDrivingLicence string = "document_type_driving_licence"
 	DocumentTypePhotoId        string = "document_type_photo_id"
@@ -16,21 +18,19 @@ const (
 )
 
 type KycDocument struct {
-	Name     string    `json:"name,omitempty"`
-	Quantity int      `json:"quantity"`
+	Name     string   `json:"name,omitempty"`
 	Types    []string `json:"types,omitempty"`
-	Status   string   `json:"status,omitempty"`
 	Required bool     `json:"required,omitempty"`
 	Details  string   `json:"details,omitempty"`
 }
 
 type KycDocuments struct {
-	Documents     []KycDocument `json:"documents,omitempty"`
+	Documents []KycDocument `json:"documents,omitempty"`
 }
 
 func NewKycDocuments() *KycDocuments {
 	newKyc := &KycDocuments{
-		Documents:     make([]KycDocument, 0),
+		Documents: make([]KycDocument, 0),
 	}
 	typeId := make([]string, 0)
 	typeSelfie := make([]string, 0)
@@ -47,15 +47,12 @@ func NewKycDocuments() *KycDocuments {
 
 	newKyc.Documents = append(newKyc.Documents, KycDocument{
 		Name:     "Passport, Driving licence or Id card",
-		Quantity: 1,
 		Types:    typeId,
-		Status:   DocumentStatusRequired,
 		Required: true,
 		Details:  "",
 	})
 	newKyc.Documents = append(newKyc.Documents, KycDocument{
 		Name:     "Selfie",
-		Quantity: 1,
 		Types:    typeSelfie,
 		Status:   DocumentStatusRequired,
 		Required: true,
@@ -63,17 +60,13 @@ func NewKycDocuments() *KycDocuments {
 	})
 	newKyc.Documents = append(newKyc.Documents, KycDocument{
 		Name:     "Video selfie",
-		Quantity: 1,
 		Types:    typeVideoSelfie,
-		Status:   DocumentStatusRequired,
 		Required: true,
 		Details:  "",
 	})
 	newKyc.Documents = append(newKyc.Documents, KycDocument{
 		Name:     "Proof of address",
-		Quantity: 1,
 		Types:    typeProofOfAddress,
-		Status:   DocumentStatusRequired,
 		Required: false,
 		Details:  "",
 	})

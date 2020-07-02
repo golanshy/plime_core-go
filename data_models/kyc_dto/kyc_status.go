@@ -5,7 +5,7 @@ const (
 	KycStatusInProgress             string = "kyc_status_in_progress"
 	KycStatusInReview               string = "kyc_status_in_review"
 	KycStatusAdditionalDataRequired string = "kyc_status_additional_data_required"
-	KycStatusApproved               string = "kyc_status_kyc_status_approved"
+	KycStatusApproved               string = "kyc_status_approved"
 	KycStatusDeclined               string = "kyc_status_declined"
 	KycStatusBanned                 string = "kyc_status_banned"
 
@@ -18,17 +18,17 @@ const (
 )
 
 type KycStatus struct {
-	UserId        int64        `json:"user_id,omitempty"`
-	Status        string        `json:"status,omitempty"`
-	LevelApproved int           `json:"level_approved,omitempty"`
+	UserId                 int64          `json:"user_id,omitempty"`
+	Status                 string         `json:"status,omitempty"`
+	LevelApproved          int            `json:"level_approved,omitempty"`
+	AdditionalDataRequired *[]KycDocument `json:"additional_data_required,omitempty"`
 }
-
-
 
 func NewKycStatus(userId int64) *KycStatus {
 	return &KycStatus{
-		UserId:        userId,
-		Status:        KycNotStarted,
-		LevelApproved: KycLevel0,
+		UserId:                 userId,
+		Status:                 KycNotStarted,
+		LevelApproved:          KycLevel0,
+		AdditionalDataRequired: nil,
 	}
 }
