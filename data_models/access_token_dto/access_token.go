@@ -17,6 +17,7 @@ const (
 	TokenTypeBearer            = "bearer"
 	GrantTypeClientCredentials = "client_credentials"
 	GrantTypeRefreshToken      = "refresh_token"
+	GrantTypePassword          = "password"
 )
 
 type AccessTokenRequest struct {
@@ -59,6 +60,15 @@ func (request *AccessTokenRequest) Validate() *rest_errors.RestErr {
 			return rest_errors.NewBadRequestError("invalid refresh token")
 		}
 		break
+	case GrantTypePassword:
+		if request.Username == "" {
+			logger.Error("error when trying to validate client_credentials_repo invalid username", nil)
+			return rest_errors.NewBadRequestError("invalid username")
+		}
+		if request.Password == "" {
+			logger.Error("error when trying to validate client_credentials_repo invalid password", nil)
+			return rest_errors.NewBadRequestError("invalid password")
+		}
 	default:
 		logger.Error("error when trying to validate client_credentials_repo", nil)
 		return rest_errors.NewBadRequestError("invalid grant type")
