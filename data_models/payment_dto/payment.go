@@ -143,6 +143,7 @@ type PaymentResult struct {
 	Id                string                             `json:"id"`
 	Payer             user_dto.User                      `json:"payer"`
 	Payee             user_dto.User                      `json:"payee"`
+	UserSecrets       *[]UserSecret                      `json:"user_secrets,omitempty"`
 	Reference         string                             `json:"reference,omitempty"`
 	Details           string                             `json:"details,omitempty"`
 	Amount            float64                            `json:"amount"`
