@@ -156,7 +156,7 @@ type PaymentResult struct {
 	FailureDetails     string                               `json:"failure_details,omitempty"`
 	Error              *rest_errors.RestErr                 `json:"error,omitempty"`
 	DateCreated        *time.Time                           `json:"date_created,omitempty"`
-	WebHook            WebHook                              `json:"web_hook,omitempty"`
+	WebHook            *WebHook                              `json:"web_hook,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {

@@ -35,19 +35,19 @@ func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
 }
 
 type Account struct {
-	Id            string               `json:"id"`
-	Email         string               `json:"email,omitempty"`
-	AccountName   string               `json:"account_name,omitempty"`
-	AccountType   int                  `json:"account_type,omitempty"`
-	Active        bool                 `json:"active,omitempty"`
-	KycStatus     *kyc_dto.KycStatus   `json:"kyc_status,omitempty"`
-	Details       string               `json:"details,omitempty"`
-	Notes         string               `json:"notes,omitempty"`
-	Owner         user_dto.User        `json:"owner,omitempty"`
-	Users         []AccountUser        `json:"users,omitempty"`
-	Address       address_dto.Address  `json:"address,omitempty"`
-	Wallets       []wallet_dao.Wallet  `json:"wallets,omitempty"`
-	Beneficiaries []AccountBeneficiary `json:"beneficiaries,omitempty"`
+	Id            string                `json:"id"`
+	Email         string                `json:"email,omitempty"`
+	AccountName   string                `json:"account_name,omitempty"`
+	AccountType   int                   `json:"account_type,omitempty"`
+	Active        bool                  `json:"active,omitempty"`
+	KycStatus     *kyc_dto.KycStatus    `json:"kyc_status,omitempty"`
+	Details       string                `json:"details,omitempty"`
+	Notes         string                `json:"notes,omitempty"`
+	Owner         user_dto.User         `json:"owner,omitempty"`
+	Users         []AccountUser         `json:"users,omitempty"`
+	Address       *address_dto.Address  `json:"address,omitempty"`
+	Wallets       *[]wallet_dao.Wallet  `json:"wallets,omitempty"`
+	Beneficiaries *[]AccountBeneficiary `json:"beneficiaries,omitempty"`
 }
 
 func (account *Account) Validate() *rest_errors.RestErr {
