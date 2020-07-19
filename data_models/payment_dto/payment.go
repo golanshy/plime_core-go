@@ -145,6 +145,7 @@ type PaymentResult struct {
 	Payer              user_dto.User                        `json:"payer"`
 	Payee              user_dto.User                        `json:"payee"`
 	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
+	WebHook            *WebHook                             `json:"web_hook,omitempty"`
 	Reference          string                               `json:"reference,omitempty"`
 	Details            string                               `json:"details,omitempty"`
 	Amount             float64                              `json:"amount"`
@@ -155,8 +156,8 @@ type PaymentResult struct {
 	TransactionResults *[]transaction_dto.TransactionResult `json:"transaction_results,omitempty"`
 	FailureDetails     string                               `json:"failure_details,omitempty"`
 	Error              *rest_errors.RestErr                 `json:"error,omitempty"`
-	DateCreated        *time.Time                           `json:"date_created,omitempty"`
-	WebHook            *WebHook                              `json:"web_hook,omitempty"`
+	DateCreated        string                               `json:"date_created,omitempty"`
+	LastUpdated        string                               `json:"last_updated,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
