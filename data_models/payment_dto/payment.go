@@ -141,7 +141,7 @@ type PaymentsResponse struct {
 }
 
 type PaymentResult struct {
-	Id                 primitive.ObjectID                   `bson:"_id, omitempty"`
+	Id                 primitive.ObjectID                   `json:"id,omitempty" bson:"_id, omitempty"`
 	Payer              user_dto.User                        `json:"payer"`
 	Payee              user_dto.User                        `json:"payee"`
 	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
@@ -197,4 +197,24 @@ type PaymentResultsResponse struct {
 	Hits    int64            `json:"hits"`
 	Total   int64            `json:"total"`
 	Results *[]PaymentResult `json:"results,omitempty"`
+}
+
+type PaymentProcessRequest struct {
+	Id          primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
+	UserSecrets *[]UserSecret      `json:"user_secrets,omitempty"`
+	DateCreated *time.Time         `json:"date_created,omitempty"`
+}
+
+func (request *PaymentProcessRequest) Validate() *rest_errors.RestErr {
+	if request.Id.IsZero() {
+		return rest_errors.NewBadRequestError("invalid id")
+	}
+	if len(*request.UserSecrets) > 0 {
+		for _, requestSecret := range *request.UserSecrets {
+			if requestSecret.Key != "" && strings.TrimSpace(requestSecret.Value) == "" {
+				return rest_errors.NewBadRequestError(fmt.Sprintf("invalid %s", requestSecret.Human))
+			}
+		}
+	}
+	return nil
 }
