@@ -13,12 +13,12 @@ import (
 )
 
 type PaymentsRequest struct {
-	Id          string     `json:"id"`
-	Reference   string     `json:"reference,omitempty"`
-	Details     string     `json:"details,omitempty"`
-	Payments    []Payment  `json:"payments,omitempty"`
-	WebHook     WebHook    `json:"web_hook,omitempty"`
-	DateCreated *time.Time `json:"date_created,omitempty"`
+	Id          string    `json:"id"`
+	Reference   string    `json:"reference,omitempty"`
+	Details     string    `json:"details,omitempty"`
+	Payments    []Payment `json:"payments,omitempty"`
+	WebHook     WebHook   `json:"web_hook,omitempty"`
+	DateCreated time.Time `json:"date_created,omitempty"`
 }
 
 type Payment struct {
@@ -31,7 +31,7 @@ type Payment struct {
 	CurrencyCode string        `json:"currency_code,omitempty"`
 	SendOn       string        `json:"send_on,omitempty"`
 	ArriveBy     string        `json:"arrive_by,omitempty"`
-	DateCreated  *time.Time    `json:"date_created,omitempty"`
+	DateCreated  time.Time     `json:"date_created,omitempty"`
 }
 
 func (payment *Payment) Validate() *rest_errors.RestErr {
@@ -141,7 +141,7 @@ type PaymentsResponse struct {
 }
 
 type PaymentResult struct {
-	Id                 primitive.ObjectID                   `json:"id,omitempty" bson:"_id, omitempty"`
+	Id                 *primitive.ObjectID                  `json:"id,omitempty" bson:"_id, omitempty"`
 	Payer              user_dto.User                        `json:"payer"`
 	Payee              user_dto.User                        `json:"payee"`
 	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
@@ -203,7 +203,7 @@ type PaymentResultsResponse struct {
 type PaymentProcessRequest struct {
 	Id          primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
 	UserSecrets *[]UserSecret      `json:"user_secrets,omitempty"`
-	DateCreated *time.Time         `json:"date_created,omitempty"`
+	DateCreated time.Time          `json:"date_created,omitempty"`
 }
 
 func (request *PaymentProcessRequest) Validate() *rest_errors.RestErr {
