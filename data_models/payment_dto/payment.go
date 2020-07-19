@@ -7,6 +7,7 @@ import (
 	"github.com/golanshy/plime_core-go/data_models/wallet_dao"
 	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strings"
 	"time"
 )
@@ -140,7 +141,7 @@ type PaymentsResponse struct {
 }
 
 type PaymentResult struct {
-	Id                 string                               `json:"_id"`
+	Id                 primitive.ObjectID                   `json:"id"`
 	Payer              user_dto.User                        `json:"payer"`
 	Payee              user_dto.User                        `json:"payee"`
 	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
