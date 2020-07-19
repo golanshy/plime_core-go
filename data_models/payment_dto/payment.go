@@ -141,7 +141,7 @@ type PaymentsResponse struct {
 }
 
 type PaymentResult struct {
-	Id                 *primitive.ObjectID                  `json:"id,omitempty" bson:"_id, omitempty"`
+	Id                 primitive.ObjectID                   `bson:"_id, omitempty"`
 	Payer              user_dto.User                        `json:"payer"`
 	Payee              user_dto.User                        `json:"payee"`
 	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
