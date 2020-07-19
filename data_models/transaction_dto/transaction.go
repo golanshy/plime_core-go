@@ -23,8 +23,8 @@ type TransactionResult struct {
 }
 
 const (
-	StatusPending  string = "pending"
-	StatusFailed   string = "failed"
-	StatusSuccess  string = "success"
-	StatusDeclined string = "declined"
+	StatusAwaitingPayee string = "awaiting_payee"
+	StatusFailed        string = "failed"
+	StatusCompleted     string = "completed"
+	StatusDeclined      string = "declined"
 )

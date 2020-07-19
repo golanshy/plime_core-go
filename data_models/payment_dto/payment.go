@@ -67,8 +67,8 @@ type WebHook struct {
 
 type UserSecret struct {
 	Key   string `json:"key"`
-	Human string `json:"human"`
-	Value string `json:"value"`
+	Human string `json:"human,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 func (request *PaymentsRequest) Validate() *rest_errors.RestErr {
@@ -140,21 +140,22 @@ type PaymentsResponse struct {
 }
 
 type PaymentResult struct {
-	Id                string                             `json:"id"`
-	Payer             user_dto.User                      `json:"payer"`
-	Payee             user_dto.User                      `json:"payee"`
-	UserSecrets       *[]UserSecret                      `json:"user_secrets,omitempty"`
-	Reference         string                             `json:"reference,omitempty"`
-	Details           string                             `json:"details,omitempty"`
-	Amount            float64                            `json:"amount"`
-	CurrencyCode      string                             `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	SendOn            string                             `json:"send_on,omitempty"`
-	ArriveBy          string                             `json:"arrive_by,omitempty"`
-	Status            string                             `json:"status"`
-	TransactionResult *transaction_dto.TransactionResult `json:"transaction_result,omitempty"`
-	FailureDetails    string                             `json:"failure_details,omitempty"`
-	Error             *rest_errors.RestErr               `json:"error,omitempty"`
-	DateCreated       *time.Time                         `json:"date_created,omitempty"`
+	Id                 string                               `json:"_id"`
+	Payer              user_dto.User                        `json:"payer"`
+	Payee              user_dto.User                        `json:"payee"`
+	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
+	Reference          string                               `json:"reference,omitempty"`
+	Details            string                               `json:"details,omitempty"`
+	Amount             float64                              `json:"amount"`
+	CurrencyCode       string                               `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	SendOn             string                               `json:"send_on,omitempty"`
+	ArriveBy           string                               `json:"arrive_by,omitempty"`
+	Status             string                               `json:"status"`
+	TransactionResults *[]transaction_dto.TransactionResult `json:"transaction_results,omitempty"`
+	FailureDetails     string                               `json:"failure_details,omitempty"`
+	Error              *rest_errors.RestErr                 `json:"error,omitempty"`
+	DateCreated        *time.Time                           `json:"date_created,omitempty"`
+	WebHook            WebHook                              `json:"web_hook,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
