@@ -137,7 +137,7 @@ type PaymentsResponse struct {
 	ReferenceId interface{} `json:"reference_id,omitempty"`
 	Reference   string      `json:"reference,omitempty"`
 	Details     string      `json:"details,omitempty"`
-	DateCreated *time.Time  `json:"date_created,omitempty"`
+	DateCreated time.Time   `json:"date_created,omitempty"`
 }
 
 type PaymentResult struct {
