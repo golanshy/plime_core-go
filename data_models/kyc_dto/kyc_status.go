@@ -21,7 +21,7 @@ type KycStatus struct {
 	UserId                 int64          `json:"user_id,omitempty"`
 	Status                 string         `json:"status,omitempty"`
 	LevelApproved          int            `json:"level_approved,omitempty"`
-	AdditionalDataRequired *[]KycDocument `json:"additional_data_required,omitempty"`
+	AdditionalDataRequired []KycDocument `json:"additional_data_required,omitempty"`
 }
 
 func NewKycStatus(userId int64) *KycStatus {

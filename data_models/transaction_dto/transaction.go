@@ -11,7 +11,7 @@ type Transaction struct {
 type TransactionResult struct {
 	Id                  string                                                   `json:"id"`
 	Status              string                                                   `json:"status"`
-	CreatedAt           *time.Time                                               `json:"created_at"`
+	CreatedAt           time.Time                                                `json:"created_at"`
 	TransactionFee      float64                                                  `json:"transaction_fee,omitempty"`
 	CurrencyCode        string                                                   `json:"currency_code"`
 	FailureReasons      []string                                                 `json:"failure_reasons,omitempty"`

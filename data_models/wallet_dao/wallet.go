@@ -16,7 +16,7 @@ type Wallet struct {
 	WalletStatus    string     `json:"status"`
 	IbanStatus      string     `json:"iban_status,omitempty"`
 	Amount          float64    `json:"amount"`
-	CreatedAt       *time.Time `json:"created_at,omitempty"`
+	CreatedAt       time.Time `json:"created_at,omitempty"`
 	CountryCode     string     `json:"country_code,omitempty"`
 	UkSortCode      string     `json:"uk_sort_code,omitempty"`
 	UkAccountNumber string     `json:"uk_account_number,omitempty"`

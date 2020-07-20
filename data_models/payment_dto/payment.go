@@ -143,7 +143,7 @@ type PaymentsResponse struct {
 type NewPaymentResult struct {
 	Payer              user_dto.User                        `json:"payer"`
 	Payee              user_dto.User                        `json:"payee"`
-	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
+	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
 	WebHook            *WebHook                             `json:"web_hook,omitempty"`
 	Reference          string                               `json:"reference,omitempty"`
 	Details            string                               `json:"details,omitempty"`
@@ -155,15 +155,15 @@ type NewPaymentResult struct {
 	TransactionResults *[]transaction_dto.TransactionResult `json:"transaction_results,omitempty"`
 	FailureDetails     string                               `json:"failure_details,omitempty"`
 	Error              *rest_errors.RestErr                 `json:"error,omitempty"`
-	DateCreated        string                               `json:"date_created,omitempty"`
-	LastUpdated        string                               `json:"last_updated,omitempty"`
+	DateCreated        time.Time                            `json:"date_created,omitempty"`
+	LastUpdated        time.Time                            `json:"last_updated,omitempty"`
 }
 
 type PaymentResult struct {
 	Id                 primitive.ObjectID                   `json:"id,omitempty" bson:"_id, omitempty"`
 	Payer              user_dto.User                        `json:"payer"`
 	Payee              user_dto.User                        `json:"payee"`
-	UserSecrets        *[]UserSecret                        `json:"user_secrets,omitempty"`
+	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
 	WebHook            *WebHook                             `json:"web_hook,omitempty"`
 	Reference          string                               `json:"reference,omitempty"`
 	Details            string                               `json:"details,omitempty"`
@@ -175,8 +175,8 @@ type PaymentResult struct {
 	TransactionResults *[]transaction_dto.TransactionResult `json:"transaction_results,omitempty"`
 	FailureDetails     string                               `json:"failure_details,omitempty"`
 	Error              *rest_errors.RestErr                 `json:"error,omitempty"`
-	DateCreated        string                               `json:"date_created,omitempty"`
-	LastUpdated        string                               `json:"last_updated,omitempty"`
+	DateCreated        time.Time                            `json:"date_created,omitempty"`
+	LastUpdated        time.Time                            `json:"last_updated,omitempty"`
 }
 
 func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
@@ -212,16 +212,16 @@ func (request *WalletPaymentRequest) Validate() *rest_errors.RestErr {
 }
 
 type PaymentResultsResponse struct {
-	Start   int64            `json:"start"`
-	Limit   int64            `json:"limit"`
-	Hits    int64            `json:"hits"`
-	Total   int64            `json:"total"`
-	Results *[]PaymentResult `json:"results,omitempty"`
+	Start   int64           `json:"start"`
+	Limit   int64           `json:"limit"`
+	Hits    int64           `json:"hits"`
+	Total   int64           `json:"total"`
+	Results []PaymentResult `json:"results,omitempty"`
 }
 
 type PaymentProcessRequest struct {
 	Id          primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
-	UserSecrets *[]UserSecret      `json:"user_secrets,omitempty"`
+	UserSecrets []UserSecret      `json:"user_secrets,omitempty"`
 	DateCreated time.Time          `json:"date_created,omitempty"`
 }
 
@@ -229,8 +229,8 @@ func (request *PaymentProcessRequest) Validate() *rest_errors.RestErr {
 	if request.Id.IsZero() {
 		return rest_errors.NewBadRequestError("invalid id")
 	}
-	if len(*request.UserSecrets) > 0 {
-		for _, requestSecret := range *request.UserSecrets {
+	if len(request.UserSecrets) > 0 {
+		for _, requestSecret := range request.UserSecrets {
 			if requestSecret.Key != "" && strings.TrimSpace(requestSecret.Value) == "" {
 				return rest_errors.NewBadRequestError(fmt.Sprintf("invalid %s", requestSecret.Human))
 			}

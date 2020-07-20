@@ -22,10 +22,8 @@ type User struct {
 	Status           string               `json:"status,omitempty"`
 	Passcode         string               `json:"passcode,omitempty"`
 	BiometricEnabled bool                 `json:"biometric_enabled,omitempty"`
-	EmailValidated   bool                 `json:"email_validated,omitempty"`
-	MobileValidated  bool                 `json:"mobile_validated,omitempty"`
 	Type             int64                `json:"type,omitempty"`
-	Address          *address_dto.Address `json:"address,omitempty"`
+	Address          address_dto.Address `json:"address,omitempty"`
 }
 
 type Users []User
