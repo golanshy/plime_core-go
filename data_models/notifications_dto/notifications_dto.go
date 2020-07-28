@@ -8,10 +8,10 @@ import (
 type NotificationRequest struct {
 	Channel     string  `json:"channel"`
 	UserIds     []int64 `json:"user_ids"`
-	Subject     string  `json:"subject"`
-	HtmlMessage string  `json:"html_message"`
-	Message     string  `json:"message"`
-	Payload     string  `json:"payload"`
+	Subject     string  `json:"subject,omitempty"`
+	HtmlMessage string  `json:"html_message,omitempty"`
+	Message     string  `json:"message,omitempty"`
+	Payload     string  `json:"payload,omitempty"`
 	DateCreated string  `json:"date_created"`
 }
 
