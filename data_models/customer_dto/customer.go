@@ -8,13 +8,15 @@ import (
 )
 
 type Customer struct {
-	Id            int64               `json:"id"`
-	Name          string              `json:"name,omitempty"`
-	Details       string              `json:"details,omitempty"`
-	ContactPerson user_dto.User       `json:"contact_person,omitempty"`
-	Status        string              `json:"status,omitempty"`
-	Address       address_dto.Address `json:"address,omitempty"`
-	DateCreated   string              `json:"date_created,omitempty"`
+	Id                    int64               `json:"id"`
+	Name                  string              `json:"name,omitempty"`
+	Details               string              `json:"details,omitempty"`
+	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
+	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
+	ContactPerson         user_dto.User       `json:"contact_person,omitempty"`
+	Status                string              `json:"status,omitempty"`
+	Address               address_dto.Address `json:"address,omitempty"`
+	DateCreated           string              `json:"date_created,omitempty"`
 }
 
 func (customer *Customer) Trim() {
@@ -26,6 +28,9 @@ func (customer *Customer) Validate() *rest_errors.RestErr {
 	customer.Trim()
 	if customer.Name == "" {
 		return rest_errors.NewBadRequestError("invalid name field")
+	}
+	if customer.CompanyRegisteredId == "" {
+		return rest_errors.NewBadRequestError("invalid company id field")
 	}
 	if customer.Details == "" {
 		return rest_errors.NewBadRequestError("invalid details field")
