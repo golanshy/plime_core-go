@@ -8,7 +8,7 @@ import (
 )
 
 type Customer struct {
-	Id                    int64               `json:"id"`
+	Id                    string              `json:"id"`
 	Name                  string              `json:"name,omitempty"`
 	Details               string              `json:"details,omitempty"`
 	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
@@ -34,6 +34,12 @@ func (customer *Customer) Validate() *rest_errors.RestErr {
 	}
 	if customer.Details == "" {
 		return rest_errors.NewBadRequestError("invalid details field")
+	}
+	if customer.ContactPerson.FirstName == "" {
+		return rest_errors.NewBadRequestError("invalid contact person first name field")
+	}
+	if customer.ContactPerson.LastName == "" {
+		return rest_errors.NewBadRequestError("invalid contact person last name field")
 	}
 	if customer.ContactPerson.Email == "" {
 		return rest_errors.NewBadRequestError("invalid contact person field")
