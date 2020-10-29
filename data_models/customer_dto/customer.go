@@ -1,6 +1,7 @@
 package customer_dto
 
 import (
+	"fmt"
 	"github.com/golanshy/plime_core-go/data_models/address_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
@@ -44,8 +45,8 @@ func (customer *Customer) Validate() *rest_errors.RestErr {
 	if customer.ContactPerson.Email == "" {
 		return rest_errors.NewBadRequestError("invalid contact person field")
 	}
-	if customer.Address.FirstLine == "" {
-		return rest_errors.NewBadRequestError("invalid address field")
+	if err := customer.Address.Validate(); err != nil {
+		return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
 	}
 	return nil
 }

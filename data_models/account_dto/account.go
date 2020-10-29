@@ -1,7 +1,9 @@
 package account_dto
 
 import (
+	"fmt"
 	"github.com/golanshy/plime_core-go/data_models/address_dto"
+	"github.com/golanshy/plime_core-go/data_models/customer_dto"
 	"github.com/golanshy/plime_core-go/data_models/kyc_dto"
 	"github.com/golanshy/plime_core-go/data_models/payment_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
@@ -11,50 +13,67 @@ import (
 )
 
 type AccountRequest struct {
-	Email        string              `json:"email"`
-	AccountName  string              `json:"account_name"`
-	AccountType  int                 `json:"account_type"`
-	CurrencyCode string              `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	Owner        user_dto.User       `json:"owner"`
-	Address      address_dto.Address `json:"address"`
+	Email        string                 `json:"email"`
+	AccountName  string                 `json:"account_name"`
+	AccountType  int                    `json:"account_type"`
+	CurrencyCode string                 `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	Owner        *user_dto.User         `json:"owner,omitempty"`
+	Customer     *customer_dto.Customer `json:"customer,omitempty"`
+	Address      address_dto.Address    `json:"address"`
 }
 
 func (accountRequest *AccountRequest) Trim() {
 	accountRequest.Email = strings.TrimSpace(accountRequest.Email)
 	accountRequest.AccountName = strings.TrimSpace(accountRequest.AccountName)
-	accountRequest.Owner.Trim()
+	if accountRequest.Owner != nil {
+		accountRequest.Owner.Trim()
+	}
+	if accountRequest.Customer != nil {
+		accountRequest.Customer.Trim()
+	}
 	accountRequest.Address.Trim()
 }
 
 func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
 	accountRequest.Trim()
 	if accountRequest.Email == "" {
-		return rest_errors.NewBadRequestError("invalid email address")
+		return rest_errors.NewBadRequestError("invalid email address field")
+	}
+	if accountRequest.Owner != nil && accountRequest.Customer != nil {
+		return rest_errors.NewBadRequestError("invalid owner and customer fields, cannot process both")
+	}
+	if accountRequest.Customer != nil {
+		accountRequest.Customer.Trim()
+		if err := accountRequest.Customer.Validate(); err != nil {
+			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer details - %s", err.Message))
+		}
 	}
 	return nil
 }
 
 type Account struct {
-	Id            string               `json:"id"`
-	Email         string               `json:"email,omitempty"`
-	AccountName   string               `json:"account_name,omitempty"`
-	AccountType   int                  `json:"account_type,omitempty"`
-	Suspended     bool                 `json:"suspended,omitempty"`
-	KycStatus     kyc_dto.KycStatus    `json:"kyc_status,omitempty"`
-	Details       string               `json:"details,omitempty"`
-	Notes         string               `json:"notes,omitempty"`
-	Owner         user_dto.User        `json:"owner,omitempty"`
-	Users         []AccountUser        `json:"users,omitempty"`
-	Address       address_dto.Address  `json:"address,omitempty"`
-	Wallets       []wallet_dao.Wallet  `json:"wallets,omitempty"`
-	Beneficiaries []AccountBeneficiary `json:"beneficiaries,omitempty"`
+	Id            string                 `json:"id"`
+	Email         string                 `json:"email,omitempty"`
+	AccountName   string                 `json:"account_name,omitempty"`
+	AccountType   int                    `json:"account_type,omitempty"`
+	Suspended     bool                   `json:"suspended,omitempty"`
+	KycStatus     *kyc_dto.KycStatus     `json:"kyc_status,omitempty"`
+	KybStatus     *kyc_dto.KycStatus     `json:"kyb_status,omitempty"`
+	Details       string                 `json:"details,omitempty"`
+	Notes         string                 `json:"notes,omitempty"`
+	Owner         *user_dto.User         `json:"owner,omitempty"`
+	Customer      *customer_dto.Customer `json:"customer,omitempty"`
+	Users         []AccountUser          `json:"users,omitempty"`
+	Address       address_dto.Address    `json:"address,omitempty"`
+	Wallets       []wallet_dao.Wallet    `json:"wallets,omitempty"`
+	Beneficiaries []AccountBeneficiary   `json:"beneficiaries,omitempty"`
 }
 
 func (account *Account) Validate() *rest_errors.RestErr {
 	account.Email = strings.TrimSpace(account.Email)
 	account.AccountName = strings.TrimSpace(account.AccountName)
 	if account.Email == "" {
-		return rest_errors.NewBadRequestError("invalid email address")
+		return rest_errors.NewBadRequestError("invalid email address field")
 	}
 	return nil
 }

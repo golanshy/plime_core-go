@@ -1,6 +1,9 @@
 package address_dto
 
-import "strings"
+import (
+	"github.com/golanshy/plime_core-go/utils/rest_errors"
+	"strings"
+)
 
 type Address struct {
 	FirstLine  string `json:"first_line,omitempty"`
@@ -22,4 +25,20 @@ func (address *Address) Trim() {
 	address.County = strings.TrimSpace(address.County)
 	address.State = strings.TrimSpace(address.State)
 	address.Country = strings.TrimSpace(address.Country)
+}
+
+func (address *Address) Validate() *rest_errors.RestErr {
+	if address.FirstLine == "" {
+		return rest_errors.NewBadRequestError("invalid address first line field")
+	}
+	if address.Town == "" {
+		return rest_errors.NewBadRequestError("invalid address town field")
+	}
+	if address.PostCode == "" {
+		return rest_errors.NewBadRequestError("invalid address postcode field")
+	}
+	if address.Country == "" {
+		return rest_errors.NewBadRequestError("invalid address country field")
+	}
+	return nil
 }
