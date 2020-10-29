@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/golanshy/plime_core-go/data_models/address_dto"
 	"github.com/golanshy/plime_core-go/data_models/customer_dto"
+	"github.com/golanshy/plime_core-go/data_models/kyb_dto"
 	"github.com/golanshy/plime_core-go/data_models/kyc_dto"
 	"github.com/golanshy/plime_core-go/data_models/payment_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
@@ -58,7 +59,7 @@ type Account struct {
 	AccountType   int                    `json:"account_type,omitempty"`
 	Suspended     bool                   `json:"suspended,omitempty"`
 	KycStatus     *kyc_dto.KycStatus     `json:"kyc_status,omitempty"`
-	KybStatus     *kyc_dto.KycStatus     `json:"kyb_status,omitempty"`
+	KybStatus     *kyb_dto.KybStatus     `json:"kyb_status,omitempty"`
 	Details       string                 `json:"details,omitempty"`
 	Notes         string                 `json:"notes,omitempty"`
 	Owner         *user_dto.User         `json:"owner,omitempty"`
