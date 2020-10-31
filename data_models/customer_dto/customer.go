@@ -51,7 +51,24 @@ type Customer struct {
 	DateCreated           string              `json:"date_created,omitempty"`
 }
 
+func (customer *Customer) Trim() {
+	customer.Name = strings.TrimSpace(customer.Name)
+	customer.Details = strings.TrimSpace(customer.Details)
+	customer.CompanyRegisteredName = strings.TrimSpace(customer.CompanyRegisteredName)
+	customer.CompanyRegisteredId = strings.TrimSpace(customer.CompanyRegisteredId)
+	customer.ContactPerson.Trim()
+	customer.Address.Trim()
+	for _, user := range customer.CustomerUsers {
+		user.Trim()
+	}
+}
+
 type CustomerUser struct {
 	User user_dto.User `json:"user,omitempty"`
 	Role string        `json:"role,omitempty"`
+}
+
+func (user *CustomerUser) Trim() {
+	user.User.Trim()
+	user.Role = strings.TrimSpace(user.Role)
 }

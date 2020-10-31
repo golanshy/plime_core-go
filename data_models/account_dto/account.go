@@ -14,13 +14,13 @@ import (
 )
 
 type AccountRequest struct {
-	Email        string                 `json:"email"`
-	AccountName  string                 `json:"account_name"`
-	AccountType  int                    `json:"account_type"`
-	CurrencyCode string                 `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	Owner        *user_dto.User         `json:"owner,omitempty"`
+	Email        string                        `json:"email"`
+	AccountName  string                        `json:"account_name"`
+	AccountType  int                           `json:"account_type"`
+	CurrencyCode string                        `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	Owner        *user_dto.User                `json:"owner,omitempty"`
 	Customer     *customer_dto.Customer `json:"customer,omitempty"`
-	Address      address_dto.Address    `json:"address"`
+	Address      address_dto.Address           `json:"address"`
 }
 
 func (accountRequest *AccountRequest) Trim() {
@@ -43,11 +43,17 @@ func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
 	if accountRequest.Owner != nil && accountRequest.Customer != nil {
 		return rest_errors.NewBadRequestError("invalid owner and customer fields, cannot process both")
 	}
-	if accountRequest.Customer != nil {
-		accountRequest.Customer.Trim()
-		if err := accountRequest.Customer.Validate(); err != nil {
-			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer details - %s", err.Message))
-		}
+	if accountRequest.Customer.Name == "" {
+		return rest_errors.NewBadRequestError("invalid name field")
+	}
+	if accountRequest.Customer.CompanyRegisteredName == "" {
+		return rest_errors.NewBadRequestError("invalid company name field")
+	}
+	if accountRequest.Customer.CompanyRegisteredId == "" {
+		return rest_errors.NewBadRequestError("invalid company id field")
+	}
+	if err := accountRequest.Customer.Address.Validate(); err != nil {
+		return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
 	}
 	return nil
 }
