@@ -38,6 +38,14 @@ func (customerRequest *CustomerRequest) Validate() *rest_errors.RestErr {
 	return nil
 }
 
+type CustomersResult struct {
+	Start   int64      `json:"start"`
+	Limit   int64      `json:"limit"`
+	Hits    int64      `json:"hits"`
+	Total   int64      `json:"total"`
+	Results []Customer `json:"results,omitempty"`
+}
+
 type Customer struct {
 	Id                    string              `json:"id"`
 	Name                  string              `json:"name,omitempty"`

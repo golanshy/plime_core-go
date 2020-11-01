@@ -9,18 +9,18 @@ const (
 	KybStatusDeclined               string = "kyb_status_declined"
 	KybStatusBanned                 string = "kyb_status_banned"
 
-	KybLevel0 int = 0
-	KybLevel1 int = 1
-	KybLevel2 int = 2
-	KybLevel3 int = 3
-	KybLevel4 int = 4
-	KybLevel5 int = 5
+	KybLevel0 int64 = 0
+	KybLevel1 int64 = 1
+	KybLevel2 int64 = 2
+	KybLevel3 int64 = 3
+	KybLevel4 int64 = 4
+	KybLevel5 int64 = 5
 )
 
 type KybStatus struct {
-	CustomerId             string        `json:"customer_id,omitempty"`
-	Status                 string        `json:"status,omitempty"`
-	LevelApproved          int           `json:"level_approved,omitempty"`
+	CustomerId             string        `json:"customer_id"`
+	Status                 string        `json:"status"`
+	LevelApproved          int64          `json:"level_approved"`
 	AdditionalDataRequired []KybDocument `json:"additional_data_required,omitempty"`
 }
 

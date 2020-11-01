@@ -9,18 +9,18 @@ const (
 	KycStatusDeclined               string = "kyc_status_declined"
 	KycStatusBanned                 string = "kyc_status_banned"
 
-	KycLevel0 int = 0
-	KycLevel1 int = 1
-	KycLevel2 int = 2
-	KycLevel3 int = 3
-	KycLevel4 int = 4
-	KycLevel5 int = 5
+	KycLevel0 int64 = 0
+	KycLevel1 int64 = 1
+	KycLevel2 int64 = 2
+	KycLevel3 int64 = 3
+	KycLevel4 int64 = 4
+	KycLevel5 int64 = 5
 )
 
 type KycStatus struct {
-	UserId                 int64         `json:"user_id,omitempty"`
-	Status                 string        `json:"status,omitempty"`
-	LevelApproved          int           `json:"level_approved,omitempty"`
+	UserId                 int64         `json:"user_id"`
+	Status                 string        `json:"status"`
+	LevelApproved          int64         `json:"level_approved"`
 	AdditionalDataRequired []KycDocument `json:"additional_data_required,omitempty"`
 }
 
