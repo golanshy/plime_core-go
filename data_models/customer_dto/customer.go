@@ -9,7 +9,9 @@ import (
 )
 
 type CustomerRequest struct {
+	Type                  int64               `json:"type"`
 	Name                  string              `json:"name,omitempty"`
+	UserId                int64               `json:"user_id,omitempty"`
 	Details               string              `json:"details,omitempty"`
 	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
 	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
@@ -23,6 +25,9 @@ func (customerRequest *CustomerRequest) Trim() {
 
 func (customerRequest *CustomerRequest) Validate() *rest_errors.RestErr {
 	customerRequest.Trim()
+	if customerRequest.Type > 2 {
+		return rest_errors.NewBadRequestError("invalid type field")
+	}
 	if customerRequest.Name == "" {
 		return rest_errors.NewBadRequestError("invalid name field")
 	}
@@ -48,7 +53,9 @@ type CustomersResult struct {
 
 type Customer struct {
 	Id                    string              `json:"id"`
+	Type                  int64               `json:"type"`
 	Name                  string              `json:"name,omitempty"`
+	UserId                int64               `json:"user_id,omitempty"`
 	Details               string              `json:"details,omitempty"`
 	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
 	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
