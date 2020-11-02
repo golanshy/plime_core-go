@@ -43,17 +43,21 @@ func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
 	if accountRequest.Owner != nil && accountRequest.Customer != nil {
 		return rest_errors.NewBadRequestError("invalid owner and customer fields, cannot process both")
 	}
-	if accountRequest.Customer.Name == "" {
-		return rest_errors.NewBadRequestError("invalid name field")
-	}
-	if accountRequest.Customer.CompanyRegisteredName == "" {
-		return rest_errors.NewBadRequestError("invalid company name field")
-	}
-	if accountRequest.Customer.CompanyRegisteredId == "" {
-		return rest_errors.NewBadRequestError("invalid company id field")
-	}
-	if err := accountRequest.Customer.Address.Validate(); err != nil {
-		return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
+
+	// For business accounts only
+	if accountRequest.AccountType == 2 {
+		if accountRequest.Customer.Name == "" {
+			return rest_errors.NewBadRequestError("invalid customer name field")
+		}
+		if accountRequest.Customer.CompanyRegisteredName == "" {
+			return rest_errors.NewBadRequestError("invalid customer company name field")
+		}
+		if accountRequest.Customer.CompanyRegisteredId == "" {
+			return rest_errors.NewBadRequestError("invalid customer company id field")
+		}
+		if err := accountRequest.Customer.Address.Validate(); err != nil {
+			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
+		}
 	}
 	return nil
 }

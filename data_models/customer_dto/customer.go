@@ -37,7 +37,7 @@ func (customerRequest *CustomerRequest) Validate() *rest_errors.RestErr {
 			return rest_errors.NewBadRequestError("invalid company id field")
 		}
 	} else {
-		// Mandatory for Persaonal / Sole traders Customers
+		// Mandatory for Personal / Sole traders Customers
 		if customerRequest.UserId < 0 {
 			return rest_errors.NewBadRequestError("invalid user id field")
 		}
