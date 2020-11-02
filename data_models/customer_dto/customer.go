@@ -31,8 +31,16 @@ func (customerRequest *CustomerRequest) Validate() *rest_errors.RestErr {
 	if customerRequest.Name == "" {
 		return rest_errors.NewBadRequestError("invalid name field")
 	}
-	if customerRequest.CompanyRegisteredId == "" {
-		return rest_errors.NewBadRequestError("invalid company id field")
+	if (customerRequest.Type > 1) {
+		// Mandatory for Business Customers
+		if customerRequest.CompanyRegisteredId == "" {
+			return rest_errors.NewBadRequestError("invalid company id field")
+		}
+	} else {
+		// Mandatory for Persaonal / Sole traders Customers
+		if customerRequest.UserId < 0 {
+			return rest_errors.NewBadRequestError("invalid user id field")
+		}
 	}
 	if customerRequest.Details == "" {
 		return rest_errors.NewBadRequestError("invalid details field")
