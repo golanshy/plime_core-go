@@ -8,10 +8,13 @@ import (
 	"strings"
 )
 
+//type PersonalAccount = 0
+//type SoleTraderAccount = 1
+//type BusinessAccount = 2
+
 type CustomerRequest struct {
 	Type                  int64               `json:"type"`
 	Name                  string              `json:"name,omitempty"`
-	UserId                int64               `json:"user_id,omitempty"`
 	Details               string              `json:"details,omitempty"`
 	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
 	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
@@ -21,30 +24,29 @@ type CustomerRequest struct {
 func (customerRequest *CustomerRequest) Trim() {
 	customerRequest.Name = strings.TrimSpace(customerRequest.Name)
 	customerRequest.Details = strings.TrimSpace(customerRequest.Details)
+	customerRequest.CompanyRegisteredName = strings.TrimSpace(customerRequest.CompanyRegisteredName)
+	customerRequest.CompanyRegisteredId = strings.TrimSpace(customerRequest.CompanyRegisteredId)
+	customerRequest.Address.Trim()
 }
 
 func (customerRequest *CustomerRequest) Validate() *rest_errors.RestErr {
 	customerRequest.Trim()
-	if customerRequest.Type > 2 {
+	if customerRequest.Type < 0 || customerRequest.Type > 2 {
 		return rest_errors.NewBadRequestError("invalid type field")
 	}
 	if customerRequest.Name == "" {
 		return rest_errors.NewBadRequestError("invalid name field")
 	}
-	if (customerRequest.Type > 1) {
+	if customerRequest.Type == 2 {
 		// Mandatory for Business Customers
+		if customerRequest.CompanyRegisteredName == "" {
+			return rest_errors.NewBadRequestError("invalid company name field")
+		}
 		if customerRequest.CompanyRegisteredId == "" {
 			return rest_errors.NewBadRequestError("invalid company id field")
 		}
-	} else {
-		// Mandatory for Personal / Sole traders Customers
-		if customerRequest.UserId < 0 {
-			return rest_errors.NewBadRequestError("invalid user id field")
-		}
 	}
-	if customerRequest.Details == "" {
-		return rest_errors.NewBadRequestError("invalid details field")
-	}
+
 	if err := customerRequest.Address.Validate(); err != nil {
 		return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
 	}
@@ -63,7 +65,6 @@ type Customer struct {
 	Id                    string              `json:"id"`
 	Type                  int64               `json:"type"`
 	Name                  string              `json:"name,omitempty"`
-	UserId                int64               `json:"user_id,omitempty"`
 	Details               string              `json:"details,omitempty"`
 	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
 	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
@@ -84,6 +85,30 @@ func (customer *Customer) Trim() {
 	for _, user := range customer.CustomerUsers {
 		user.Trim()
 	}
+}
+
+func (customer *Customer) Validate() *rest_errors.RestErr {
+	customer.Trim()
+	if customer.Type < 0 || customer.Type > 2 {
+		return rest_errors.NewBadRequestError("invalid type field")
+	}
+	if customer.Name == "" {
+		return rest_errors.NewBadRequestError("invalid name field")
+	}
+	if customer.Type == 2 {
+		// Mandatory for Business Customers
+		if customer.CompanyRegisteredName == "" {
+			return rest_errors.NewBadRequestError("invalid company name field")
+		}
+		if customer.CompanyRegisteredId == "" {
+			return rest_errors.NewBadRequestError("invalid company id field")
+		}
+	}
+
+	if err := customer.Address.Validate(); err != nil {
+		return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
+	}
+	return nil
 }
 
 type CustomerUser struct {

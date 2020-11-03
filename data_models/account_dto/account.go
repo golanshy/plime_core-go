@@ -13,25 +13,24 @@ import (
 	"strings"
 )
 
+//type PersonalAccount = 0
+//type SoleTraderAccount = 1
+//type BusinessAccount = 2
+
 type AccountRequest struct {
-	Email        string                        `json:"email"`
-	AccountName  string                        `json:"account_name"`
-	AccountType  int                           `json:"account_type"`
-	CurrencyCode string                        `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	Owner        *user_dto.User                `json:"owner,omitempty"`
-	Customer     *customer_dto.Customer `json:"customer,omitempty"`
-	Address      address_dto.Address           `json:"address"`
+	Type         int64                 `json:"type"`
+	Name         string                `json:"name"`
+	Email        string                `json:"email"`
+	CurrencyCode string                `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	Customer     customer_dto.Customer `json:"customer,omitempty"`
+	Address      address_dto.Address   `json:"address"`
 }
 
 func (accountRequest *AccountRequest) Trim() {
 	accountRequest.Email = strings.TrimSpace(accountRequest.Email)
-	accountRequest.AccountName = strings.TrimSpace(accountRequest.AccountName)
-	if accountRequest.Owner != nil {
-		accountRequest.Owner.Trim()
-	}
-	if accountRequest.Customer != nil {
-		accountRequest.Customer.Trim()
-	}
+	accountRequest.Name = strings.TrimSpace(accountRequest.Name)
+	accountRequest.CurrencyCode = strings.TrimSpace(accountRequest.CurrencyCode)
+	accountRequest.Customer.Trim()
 	accountRequest.Address.Trim()
 }
 
@@ -40,26 +39,42 @@ func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
 	if accountRequest.Email == "" {
 		return rest_errors.NewBadRequestError("invalid email address field")
 	}
-	if accountRequest.Owner != nil && accountRequest.Customer != nil {
-		return rest_errors.NewBadRequestError("invalid owner and customer fields, cannot process both")
+	if accountRequest.Type < 0 || accountRequest.Type > 2 {
+		return rest_errors.NewBadRequestError("invalid type field")
 	}
-
+	if accountRequest.Customer.Id == "" {
+		return rest_errors.NewBadRequestError("invalid customer id field")
+	}
+	if accountRequest.Customer.Type != accountRequest.Type {
+		return rest_errors.NewBadRequestError("invalid customer type field")
+	}
+	if accountRequest.Customer.Type < 0 || accountRequest.Customer.Type > 2 {
+		return rest_errors.NewBadRequestError("invalid customer type field")
+	}
+	if accountRequest.Customer.Name == "" {
+		return rest_errors.NewBadRequestError("invalid customer name field")
+	}
 	// For business accounts only
-	if accountRequest.AccountType == 2 {
-		if accountRequest.Customer.Name == "" {
-			return rest_errors.NewBadRequestError("invalid customer name field")
-		}
+	if accountRequest.Type == 2 {
 		if accountRequest.Customer.CompanyRegisteredName == "" {
 			return rest_errors.NewBadRequestError("invalid customer company name field")
 		}
 		if accountRequest.Customer.CompanyRegisteredId == "" {
 			return rest_errors.NewBadRequestError("invalid customer company id field")
 		}
-		if err := accountRequest.Customer.Address.Validate(); err != nil {
-			return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
-		}
+	}
+	if err := accountRequest.Customer.Validate(); err != nil {
+		return rest_errors.NewBadRequestError(fmt.Sprintf("invalid customer address details - %s", err.Message))
 	}
 	return nil
+}
+
+type AccountsResult struct {
+	Start   int64     `json:"start"`
+	Limit   int64     `json:"limit"`
+	Hits    int64     `json:"hits"`
+	Total   int64     `json:"total"`
+	Results []Account `json:"results,omitempty"`
 }
 
 type Account struct {
