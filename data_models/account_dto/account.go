@@ -80,8 +80,8 @@ type AccountsResult struct {
 type Account struct {
 	Id            string                 `json:"id"`
 	Email         string                 `json:"email,omitempty"`
-	AccountName   string                 `json:"account_name,omitempty"`
-	AccountType   int                    `json:"account_type,omitempty"`
+	Name          string                 `json:"name,omitempty"`
+	Type          int64                  `json:"type,omitempty"`
 	Suspended     bool                   `json:"suspended,omitempty"`
 	KycStatus     *kyc_dto.KycStatus     `json:"kyc_status,omitempty"`
 	KybStatus     *kyb_dto.KybStatus     `json:"kyb_status,omitempty"`
@@ -97,7 +97,7 @@ type Account struct {
 
 func (account *Account) Validate() *rest_errors.RestErr {
 	account.Email = strings.TrimSpace(account.Email)
-	account.AccountName = strings.TrimSpace(account.AccountName)
+	account.Name = strings.TrimSpace(account.Name)
 	if account.Email == "" {
 		return rest_errors.NewBadRequestError("invalid email address field")
 	}
