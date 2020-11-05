@@ -75,7 +75,7 @@ func TestClientCredentials_ValidateClientIdFailed(t *testing.T) {
 		AppName:      "abc",
 		AppDetails:   "def",
 		ClientSecret: "123",
-		DateCreated:  1,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
@@ -93,7 +93,7 @@ func TestClientCredentials_ValidateClientNameFailed(t *testing.T) {
 		AppName:      "abc",
 		AppDetails:   "def",
 		ClientSecret: "123",
-		DateCreated:  1,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
@@ -111,7 +111,7 @@ func TestClientCredentials_ValidateAppNameFailed(t *testing.T) {
 		AppName:      "   ",
 		AppDetails:   "def",
 		ClientSecret: "123",
-		DateCreated:  1,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
@@ -129,7 +129,7 @@ func TestClientCredentials_ValidateAppDetailsFailed(t *testing.T) {
 		AppName:      "abc",
 		AppDetails:   "  ",
 		ClientSecret: "123",
-		DateCreated:  1,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
@@ -147,7 +147,7 @@ func TestClientCredentials_ValidateClientSecretFailed(t *testing.T) {
 		AppName:      "abc",
 		AppDetails:   "def",
 		ClientSecret: "   ",
-		DateCreated:  1,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
@@ -165,7 +165,7 @@ func TestClientCredentials_ValidateGrantTypeFailed(t *testing.T) {
 		AppName:      "abc",
 		AppDetails:   "def",
 		ClientSecret: "123",
-		DateCreated:  1,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
@@ -183,7 +183,7 @@ func TestClientCredentials_ValidateDateCreatedFailed(t *testing.T) {
 		AppName:      "abc",
 		AppDetails:   "def",
 		ClientSecret: "123",
-		DateCreated:  0,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
@@ -201,7 +201,7 @@ func TestClientCredentials_ValidateDateCreatedSuccess(t *testing.T) {
 		AppName:      "abc",
 		AppDetails:   "def",
 		ClientSecret: "123",
-		DateCreated:  1,
+		DateCreated:  "1",
 	}
 
 	err := cr.Validate()
