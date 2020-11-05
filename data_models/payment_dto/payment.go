@@ -2,8 +2,8 @@ package payment_dto
 
 import (
 	"fmt"
+	"github.com/golanshy/plime_core-go/data_models/customer_dto"
 	"github.com/golanshy/plime_core-go/data_models/transaction_dto"
-	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/data_models/wallet_dao"
 	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
@@ -22,16 +22,16 @@ type PaymentsRequest struct {
 }
 
 type Payment struct {
-	Id           string        `json:"id,omitempty"`
-	Payee        user_dto.User `json:"payee,omitempty"`
-	UserSecrets  []UserSecret  `json:"user_secrets,omitempty"`
-	Reference    string        `json:"reference,omitempty"`
-	Details      string        `json:"details,omitempty"`
-	Amount       float64       `json:"amount,omitempty"`
-	CurrencyCode string        `json:"currency_code,omitempty"`
-	SendOn       string        `json:"send_on,omitempty"`
-	ArriveBy     string        `json:"arrive_by,omitempty"`
-	DateCreated  time.Time     `json:"date_created,omitempty"`
+	Id           string       `json:"id,omitempty"`
+	Payee        Payee        `json:"payee,omitempty"`
+	UserSecrets  []UserSecret `json:"user_secrets,omitempty"`
+	Reference    string       `json:"reference,omitempty"`
+	Details      string       `json:"details,omitempty"`
+	Amount       float64      `json:"amount,omitempty"`
+	CurrencyCode string       `json:"currency_code,omitempty"`
+	SendOn       string       `json:"send_on,omitempty"`
+	ArriveBy     string       `json:"arrive_by,omitempty"`
+	DateCreated  time.Time    `json:"date_created,omitempty"`
 }
 
 func (payment *Payment) Validate() *rest_errors.RestErr {
@@ -56,6 +56,44 @@ func (payment *Payment) Validate() *rest_errors.RestErr {
 				return rest_errors.NewBadRequestError("invalid user secret value field")
 			}
 		}
+	}
+	return nil
+}
+
+type Payee struct {
+	Type                int64  `json:"type"`
+	Details             string `json:"details,omitempty"`
+	CompanyName         string `json:"company_name,omitempty"`
+	CompanyRegisteredId string `json:"company_registered_id,omitempty"`
+	FirstName           string `json:"first_name,omitempty"`
+	LastName            string `json:"last_name,omitempty"`
+	Email               string `json:"email,omitempty"`
+	Mobile              string `json:"mobile,omitempty"`
+	CountryCode         string `json:"country_code,omitempty"`
+}
+
+func (payee *Payee) Trim() {
+	payee.Details = strings.TrimSpace(payee.Details)
+	payee.CompanyName = strings.TrimSpace(payee.CompanyName)
+	payee.CompanyRegisteredId = strings.TrimSpace(payee.CompanyRegisteredId)
+	payee.FirstName = strings.TrimSpace(payee.FirstName)
+	payee.LastName = strings.TrimSpace(payee.LastName)
+	payee.Email = strings.TrimSpace(payee.Email)
+	payee.Mobile = strings.TrimSpace(payee.Mobile)
+	payee.CountryCode = strings.TrimSpace(payee.CountryCode)
+}
+
+func (payee *Payee) Validate() *rest_errors.RestErr {
+	payee.Trim()
+	if payee.Email == "" {
+		return rest_errors.NewBadRequestError("invalid payee email")
+	}
+	if payee.Type < 0 || payee.Type > 2 {
+		return rest_errors.NewBadRequestError("invalid payee type")
+	}
+	// business type
+	if payee.Type == 2 && (payee.CompanyName == "" || payee.CompanyRegisteredId == "") {
+		return rest_errors.NewBadRequestError("invalid company details for business type")
 	}
 	return nil
 }
@@ -141,8 +179,8 @@ type PaymentsResponse struct {
 }
 
 type NewPaymentResult struct {
-	Payer              user_dto.User                        `json:"payer"`
-	Payee              user_dto.User                        `json:"payee"`
+	Payer              customer_dto.Customer                `json:"payer"`
+	Payee              customer_dto.Customer                `json:"payee"`
 	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
 	WebHook            *WebHook                             `json:"web_hook,omitempty"`
 	Reference          string                               `json:"reference,omitempty"`
@@ -161,8 +199,8 @@ type NewPaymentResult struct {
 
 type PaymentResult struct {
 	Id                 primitive.ObjectID                   `json:"id,omitempty" bson:"_id, omitempty"`
-	Payer              user_dto.User                        `json:"payer"`
-	Payee              user_dto.User                        `json:"payee"`
+	Payer              customer_dto.Customer                `json:"payer"`
+	Payee              customer_dto.Customer                `json:"payee"`
 	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
 	WebHook            *WebHook                             `json:"web_hook,omitempty"`
 	Reference          string                               `json:"reference,omitempty"`
@@ -221,7 +259,7 @@ type PaymentResultsResponse struct {
 
 type PaymentProcessRequest struct {
 	Id          primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
-	UserSecrets []UserSecret      `json:"user_secrets,omitempty"`
+	UserSecrets []UserSecret       `json:"user_secrets,omitempty"`
 	DateCreated time.Time          `json:"date_created,omitempty"`
 }
 
