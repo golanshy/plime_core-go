@@ -200,7 +200,7 @@ type NewPaymentResult struct {
 type PaymentResult struct {
 	Id                 primitive.ObjectID                   `json:"id,omitempty" bson:"_id, omitempty"`
 	Payer              customer_dto.Customer                `json:"payer"`
-	Payee              customer_dto.Customer                `json:"payee"`
+	Payee              Payee                                `json:"payee"`
 	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
 	WebHook            *WebHook                             `json:"web_hook,omitempty"`
 	Reference          string                               `json:"reference,omitempty"`
