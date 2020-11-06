@@ -180,7 +180,7 @@ type PaymentsResponse struct {
 
 type NewPaymentResult struct {
 	Payer              customer_dto.Customer                `json:"payer"`
-	Payee              customer_dto.Customer                `json:"payee"`
+	Payee              Payee                                `json:"payee"`
 	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
 	WebHook            *WebHook                             `json:"web_hook,omitempty"`
 	Reference          string                               `json:"reference,omitempty"`
