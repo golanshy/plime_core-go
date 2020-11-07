@@ -88,16 +88,17 @@ func (request *PublicPaymentsRequest) Validate() *rest_errors.RestErr {
 }
 
 type PublicPaymentRequest struct {
-	Type         int64        `json:"type"`
-	Reference    string       `json:"reference"`
-	Details      string       `json:"details"`
-	Amount       float64      `json:"amount"`
-	CurrencyCode string       `json:"currency_code"`
-	Payee        Payee        `json:"payee"`
-	UserSecrets  []UserSecret `json:"user_secrets,omitempty"`
-	RestrictedTo string       `json:"restricted_to,omitempty"`
-	SendOn       string       `json:"send_on,omitempty"`
-	ArriveBy     string       `json:"arrive_by,omitempty"`
+	Type         int64                  `json:"type"`
+	Reference    string                 `json:"reference"`
+	Details      string                 `json:"details"`
+	Amount       float64                `json:"amount"`
+	CurrencyCode string                 `json:"currency_code"`
+	Payer        *customer_dto.Customer `json:"payer,omitempty"`
+	Payee        Payee                  `json:"payee"`
+	UserSecrets  []UserSecret           `json:"user_secrets,omitempty"`
+	RestrictedTo string                 `json:"restricted_to,omitempty"`
+	SendOn       string                 `json:"send_on,omitempty"`
+	ArriveBy     string                 `json:"arrive_by,omitempty"`
 }
 
 type PaymentRequest struct {
