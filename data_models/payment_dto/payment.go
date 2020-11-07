@@ -228,32 +228,25 @@ func (request *PaymentProcessRequest) Validate() *rest_errors.RestErr {
 	return nil
 }
 
-//type PaymentResult struct {
-//	Id                 primitive.ObjectID                   `json:"id,omitempty" bson:"_id, omitempty"`
-//	Payer              customer_dto.Customer                `json:"payer"`
-//	Payee              customer_dto.Customer                `json:"payee"`
-//	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
-//	WebHook            *WebHook                             `json:"web_hook,omitempty"`
-//	Reference          string                               `json:"reference,omitempty"`
-//	Details            string                               `json:"details,omitempty"`
-//	Amount             float64                              `json:"amount"`
-//	CurrencyCode       string                               `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-//	SendOn             string                               `json:"send_on,omitempty"`
-//	ArriveBy           string                               `json:"arrive_by,omitempty"`
-//	Status             string                               `json:"status"`
-//	TransactionResults *[]transaction_dto.TransactionResult `json:"transaction_results,omitempty"`
-//	FailureDetails     string                               `json:"failure_details,omitempty"`
-//	Error              *rest_errors.RestErr                 `json:"error,omitempty"`
-//	DateCreated        time.Time                            `json:"date_created,omitempty"`
-//	LastUpdated        time.Time                            `json:"last_updated,omitempty"`
-//}
-
-//func (request *PaymentsResponse) Validate() *rest_errors.RestErr {
-//	//if request.Email == "" {
-//	//	return rest_errors.NewBadRequestError("invalid email address")
-//	//}
-//	return nil
-//}
+type PaymentResult struct {
+	Id                 primitive.ObjectID                   `json:"id,omitempty" bson:"_id, omitempty"`
+	Payer              customer_dto.Customer                `json:"payer"`
+	Payee              customer_dto.Customer                `json:"payee"`
+	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
+	WebHook            *WebHook                             `json:"web_hook,omitempty"`
+	Reference          string                               `json:"reference,omitempty"`
+	Details            string                               `json:"details,omitempty"`
+	Amount             float64                              `json:"amount"`
+	CurrencyCode       string                               `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	SendOn             string                               `json:"send_on,omitempty"`
+	ArriveBy           string                               `json:"arrive_by,omitempty"`
+	Status             string                               `json:"status"`
+	TransactionResults *[]transaction_dto.TransactionResult `json:"transaction_results,omitempty"`
+	FailureDetails     string                               `json:"failure_details,omitempty"`
+	Error              *rest_errors.RestErr                 `json:"error,omitempty"`
+	DateCreated        time.Time                            `json:"date_created,omitempty"`
+	LastUpdated        time.Time                            `json:"last_updated,omitempty"`
+}
 
 type WalletPaymentRequest struct {
 	PayerWallet wallet_dao.Wallet    `json:"payer_wallet"`
