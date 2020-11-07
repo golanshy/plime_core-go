@@ -262,7 +262,7 @@ func (request *WalletPaymentRequest) Validate() *rest_errors.RestErr {
 	if payeeErr := request.PayeeWallet.Validate(); payeeErr != nil {
 		return rest_errors.NewBadRequestError("invalid payee data")
 	}
-	if paymentErr := request.Payment.Validate(); paymentErr != nil {
+	if paymentErr := request.Payment.Payee.Validate(); paymentErr != nil {
 		return rest_errors.NewBadRequestError("invalid payment data")
 	}
 	if request.Payment.CurrencyCode != request.PayerWallet.CurrencyCode {
