@@ -210,13 +210,13 @@ type PaymentResultsResponse struct {
 }
 
 type PaymentProcessRequest struct {
-	Id          primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
-	UserSecrets []UserSecret       `json:"user_secrets,omitempty"`
-	DateCreated time.Time          `json:"date_created,omitempty"`
+	Id          string       `json:"id"`
+	UserSecrets []UserSecret `json:"user_secrets,omitempty"`
+	DateCreated time.Time    `json:"date_created,omitempty"`
 }
 
 func (request *PaymentProcessRequest) Validate() *rest_errors.RestErr {
-	if request.Id.IsZero() {
+	if request.Id == "" {
 		return rest_errors.NewBadRequestError("invalid id")
 	}
 	if len(request.UserSecrets) > 0 {
