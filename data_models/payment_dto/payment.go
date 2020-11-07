@@ -99,6 +99,7 @@ type PublicPaymentRequest struct {
 	RestrictedTo string                 `json:"restricted_to,omitempty"`
 	SendOn       string                 `json:"send_on,omitempty"`
 	ArriveBy     string                 `json:"arrive_by,omitempty"`
+	DateCreated  time.Time              `json:"date_created,omitempty"`
 }
 
 type PaymentRequest struct {
