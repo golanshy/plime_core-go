@@ -139,11 +139,11 @@ type AccountBeneficiary struct {
 }
 
 type AccountBeneficiaryPaymentRequest struct {
-	PayerAccount       Account             `json:"payer_account,omitempty"`
-	AccountBeneficiary AccountBeneficiary  `json:"account_beneficiary,omitempty"`
-	Payment            payment_dto.Payment `json:"payment,omitempty"`
+	PayerAccount       Account                          `json:"payer_account,omitempty"`
+	AccountBeneficiary AccountBeneficiary               `json:"account_beneficiary,omitempty"`
+	Payment            payment_dto.PublicPaymentRequest `json:"payment,omitempty"`
 }
 
 func (request *AccountBeneficiaryPaymentRequest) Validate() *rest_errors.RestErr {
-	return nil
+	return request.Payment.Validate()
 }
