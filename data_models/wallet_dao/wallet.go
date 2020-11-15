@@ -23,6 +23,7 @@ type Wallet struct {
 	CountryCode      string            `json:"country_code,omitempty"`
 	UkSortCode       string            `json:"uk_sort_code,omitempty"`
 	UkAccountNumber  string            `json:"uk_account_number,omitempty"`
+	RestrictedWallet *RestrictedWallet `json:"restricted_wallet,omitempty"`
 }
 
 func (wallet *Wallet) Validate() *rest_errors.RestErr {
@@ -40,15 +41,15 @@ func (wallet *Wallet) Validate() *rest_errors.RestErr {
 
 type RestrictedWallet struct {
 	Id               primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
-	HolderId         string            `json:"holder_id"`
-	WalletStatus     string            `json:"status"`
-	CurrencyCode     string            `json:"currency_code"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
-	Amount           float64           `json:"amount"`
-	RestrictedTo     string             `json:"restricted_to"`
-	PaymentReference string             `json:"payment_reference"`
-	PayerId          string             `json:"payer_id"`
-	PayerName        string             `json:"payer_name"`
-	CreatedAt        time.Time         `json:"created_at,omitempty"`
+	HolderId         string             `json:"holder_id,omitempty"`
+	WalletStatus     string             `json:"status,omitempty"`
+	CurrencyCode     string             `json:"currency_code,omitempty"` // Iso 4217 https://en.wikipedia.org/wiki/ISO_4217
+	Amount           float64            `json:"amount,omitempty"`
+	RestrictedTo     string             `json:"restricted_to,omitempty"`
+	PaymentReference string             `json:"payment_reference,omitempty"`
+	PayerId          string             `json:"payer_id,omitempty"`
+	PayerName        string             `json:"payer_name,omitempty"`
+	CreatedAt        time.Time          `json:"created_at,omitempty"`
 }
 
 type RestrictedWalletRequest struct {
