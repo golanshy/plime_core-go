@@ -210,9 +210,10 @@ type PaymentResultsResponse struct {
 }
 
 type PaymentProcessRequest struct {
-	Id          string       `json:"id"`
-	UserSecrets []UserSecret `json:"user_secrets,omitempty"`
-	DateCreated time.Time    `json:"date_created,omitempty"`
+	Id                string       `json:"id"`
+	ThirdPartyPayeeId string       `json:"third_party_payee_id,omitempty"`
+	UserSecrets       []UserSecret `json:"user_secrets,omitempty"`
+	DateCreated       time.Time    `json:"date_created,omitempty"`
 }
 
 func (request *PaymentProcessRequest) Validate() *rest_errors.RestErr {
