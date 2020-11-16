@@ -5,6 +5,7 @@ import (
 	"github.com/golanshy/plime_core-go/data_models/address_dto"
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strings"
 )
 
@@ -62,7 +63,7 @@ type CustomersResult struct {
 }
 
 type Customer struct {
-	Id                    string              `json:"id"`
+	Id                    primitive.ObjectID  `json:"id,omitempty" bson:"_id, omitempty"`
 	Type                  int64               `json:"type"`
 	Name                  string              `json:"name,omitempty"`
 	Details               string              `json:"details,omitempty"`

@@ -2,18 +2,20 @@ package address_dto
 
 import (
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strings"
 )
 
 type Address struct {
-	FirstLine  string `json:"first_line,omitempty"`
-	SecondLine string `json:"second_line,omitempty"`
-	ThirdLine  string `json:"third_line,omitempty"`
-	Town       string `json:"town,omitempty"`
-	PostCode   string `json:"post_code,omitempty"`
-	County     string `json:"county,omitempty"`
-	State      string `json:"state,omitempty"`
-	Country    string `json:"country,omitempty"`
+	Id         primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
+	FirstLine  string             `json:"first_line,omitempty"`
+	SecondLine string             `json:"second_line,omitempty"`
+	ThirdLine  string             `json:"third_line,omitempty"`
+	Town       string             `json:"town,omitempty"`
+	PostCode   string             `json:"post_code,omitempty"`
+	County     string             `json:"county,omitempty"`
+	State      string             `json:"state,omitempty"`
+	Country    string             `json:"country,omitempty"`
 }
 
 func (address *Address) Trim() {

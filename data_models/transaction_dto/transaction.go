@@ -2,6 +2,7 @@ package transaction_dto
 
 import (
 	"github.com/golanshy/plime_core-go/data_models/rails_bank_models/rails_bank_transaction_dto"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
 
@@ -9,7 +10,7 @@ type Transaction struct {
 }
 
 type TransactionResult struct {
-	Id                  string                                                   `json:"id"`
+	Id                  primitive.ObjectID                                       `json:"id,omitempty" bson:"_id, omitempty"`
 	Status              string                                                   `json:"status"`
 	CreatedAt           time.Time                                                `json:"created_at"`
 	TransactionFee      float64                                                  `json:"transaction_fee,omitempty"`

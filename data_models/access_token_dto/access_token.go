@@ -161,5 +161,5 @@ func (at *AccessToken) UpdateExpirationTime() {
 }
 
 func (at *AccessToken) CreateAuthorizedAccessToken(user *user_dto.User) {
-	at.UserId = user.Id
+	at.UserId = user.Id.Hex()
 }

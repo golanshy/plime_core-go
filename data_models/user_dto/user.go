@@ -3,6 +3,7 @@ package user_dto
 import (
 	"github.com/golanshy/plime_core-go/data_models/address_dto"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strings"
 )
 
@@ -11,18 +12,18 @@ const (
 )
 
 type User struct {
-	Id               string                `json:"id"`
-	FirstName        string               `json:"first_name,omitempty"`
-	LastName         string               `json:"last_name,omitempty"`
-	Email            string               `json:"email,omitempty"`
-	DateOfBirth      string               `json:"date_of_birth,omitempty"`
-	Mobile           string               `json:"mobile,omitempty"`
-	CountryCode      string               `json:"country_code,omitempty"`
-	DateCreated      string               `json:"date_created,omitempty"`
-	Status           string               `json:"status,omitempty"`
-	Passcode         string               `json:"passcode,omitempty"`
-	BiometricEnabled bool                 `json:"biometric_enabled,omitempty"`
-	Type             int64                `json:"type,omitempty"`
+	Id               primitive.ObjectID  `json:"id,omitempty" bson:"_id, omitempty"`
+	FirstName        string              `json:"first_name,omitempty"`
+	LastName         string              `json:"last_name,omitempty"`
+	Email            string              `json:"email,omitempty"`
+	DateOfBirth      string              `json:"date_of_birth,omitempty"`
+	Mobile           string              `json:"mobile,omitempty"`
+	CountryCode      string              `json:"country_code,omitempty"`
+	DateCreated      string              `json:"date_created,omitempty"`
+	Status           string              `json:"status,omitempty"`
+	Passcode         string              `json:"passcode,omitempty"`
+	BiometricEnabled bool                `json:"biometric_enabled,omitempty"`
+	Type             int64               `json:"type,omitempty"`
 	Address          address_dto.Address `json:"address,omitempty"`
 }
 

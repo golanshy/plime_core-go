@@ -1,5 +1,7 @@
 package id_dto
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Id struct {
-	Id string `json:"id"`
+	Id   primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
 }

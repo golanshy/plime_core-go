@@ -10,6 +10,7 @@ import (
 	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/data_models/wallet_dao"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strings"
 )
 
@@ -78,7 +79,7 @@ type AccountsResult struct {
 }
 
 type Account struct {
-	Id            string                 `json:"id"`
+	Id            primitive.ObjectID     `json:"id,omitempty" bson:"_id, omitempty"`
 	Email         string                 `json:"email,omitempty"`
 	Name          string                 `json:"name,omitempty"`
 	Type          int64                  `json:"type,omitempty"`
