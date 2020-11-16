@@ -16,6 +16,7 @@ type AuthToken struct {
 	Email          string `json:"email"`
 	DateCreated    string `json:"date_created"`
 	Expires        int64  `json:"expires"`
+	DateRevoked    string `json:"date_revoked,omitempty"`
 }
 
 func GetNewEmailAuthTokenByEmail(email string) *AuthToken {

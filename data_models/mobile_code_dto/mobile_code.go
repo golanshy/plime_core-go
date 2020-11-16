@@ -15,6 +15,7 @@ type MobileCode struct {
 	Email       string `json:"email"`
 	DateCreated string `json:"date_created"`
 	Expires     int64  `json:"expires"`
+	DateRevoked string `json:"date_revoked,omitempty"`
 }
 
 func GetMobileCodeByEmail(email string) *MobileCode {
