@@ -2,12 +2,10 @@ package address_dto
 
 import (
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strings"
 )
 
 type Address struct {
-	Id         primitive.ObjectID `json:"id,omitempty" bson:"_id, omitempty"`
 	FirstLine  string             `json:"first_line,omitempty"`
 	SecondLine string             `json:"second_line,omitempty"`
 	ThirdLine  string             `json:"third_line,omitempty"`
