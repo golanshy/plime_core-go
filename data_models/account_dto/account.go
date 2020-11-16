@@ -80,6 +80,7 @@ type AccountsResult struct {
 
 type Account struct {
 	Id            primitive.ObjectID     `json:"id,omitempty" bson:"_id, omitempty"`
+	HolderId      string                 `json:"holder_id,omitempty"`
 	Email         string                 `json:"email,omitempty"`
 	Name          string                 `json:"name,omitempty"`
 	Type          int64                  `json:"type,omitempty"`
