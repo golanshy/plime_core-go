@@ -7,7 +7,7 @@ import (
 
 type NotificationRequest struct {
 	Channel     string  `json:"channel"`
-	UserIds     []int64 `json:"user_ids"`
+	UserIds     []string `json:"user_ids"`
 	Subject     string  `json:"subject,omitempty"`
 	HtmlMessage string  `json:"html_message,omitempty"`
 	Message     string  `json:"message,omitempty"`

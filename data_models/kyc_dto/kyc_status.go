@@ -18,13 +18,13 @@ const (
 )
 
 type KycStatus struct {
-	UserId                 int64         `json:"user_id"`
+	UserId                 string         `json:"user_id"`
 	Status                 string        `json:"status"`
 	LevelApproved          int64         `json:"level_approved"`
 	AdditionalDataRequired []KycDocument `json:"additional_data_required,omitempty"`
 }
 
-func NewKycStatus(userId int64) KycStatus {
+func NewKycStatus(userId string) KycStatus {
 	return KycStatus{
 		UserId:        userId,
 		Status:        KycNotStarted,

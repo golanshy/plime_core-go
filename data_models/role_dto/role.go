@@ -11,7 +11,7 @@ const (
 )
 
 type UserRole struct {
-	UserId                int64  `json:"user_id"`
+	UserId                string  `json:"user_id"`
 	CustomerId            string `json:"customer_id"`
 	CustomerName          string `json:"customer_name"`
 	UserEmail             string `json:"user_email,omitempty"`

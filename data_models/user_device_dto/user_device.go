@@ -12,7 +12,7 @@ type UserDevice struct {
 	OsVersion string `json:"os_version"`
 	AppName   string `json:"app_name"`
 	PushId    string `json:"push_id"`
-	UserId    int64  `json:"user_id"`
+	UserId    string  `json:"user_id"`
 }
 
 func (d *UserDevice) Validate() *rest_errors.RestErr {

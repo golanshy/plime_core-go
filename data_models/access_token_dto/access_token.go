@@ -80,7 +80,7 @@ type AccessToken struct {
 	TokenType      string `json:"token_type,omitempty"`
 	AccessToken    string `json:"access_token"`
 	RefreshToken   string `json:"refresh_token"`
-	UserId         int64  `json:"user_id,omitempty"`
+	UserId         string  `json:"user_id,omitempty"`
 	ClientId       string `json:"client_id,omitempty"`
 	EmailVerified  bool   `json:"email_verified"`
 	MobileVerified bool   `json:"mobile_verified"`
@@ -91,7 +91,7 @@ type AccessToken struct {
 // Web Frontend ClientId: 123
 // Android application ClientId: 234
 
-func GetNewAccessTokenByUserId(userId int64) *AccessToken {
+func GetNewAccessTokenByUserId(userId string) *AccessToken {
 	return &AccessToken{
 		TokenType:    TokenTypeBearer,
 		AccessToken:  "",
@@ -110,7 +110,7 @@ func GetNewAccessTokenByClientId(clientId string) *AccessToken {
 		TokenType:    TokenTypeBearer,
 		AccessToken:  "",
 		RefreshToken: "",
-		UserId:       0,
+		UserId:       "",
 		ClientId:     clientId,
 		DateCreated:  date_utils.GetNowDBFormat(),
 		Expires:      time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
@@ -139,7 +139,8 @@ func (at *AccessToken) Validate() *rest_errors.RestErr {
 		logger.Error("error when trying to validate access_token invalid access token id", nil)
 		return rest_errors.NewBadRequestError("invalid access token id")
 	}
-	if at.UserId <= 0 {
+	at.UserId = strings.TrimSpace(at.UserId)
+	if at.UserId == "" {
 		logger.Error("error when trying to validate access_token invalid user id", nil)
 		return rest_errors.NewBadRequestError("invalid user id")
 	}
