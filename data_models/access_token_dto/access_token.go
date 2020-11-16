@@ -80,12 +80,13 @@ type AccessToken struct {
 	TokenType      string `json:"token_type,omitempty"`
 	AccessToken    string `json:"access_token"`
 	RefreshToken   string `json:"refresh_token"`
-	UserId         string  `json:"user_id,omitempty"`
+	UserId         string `json:"user_id,omitempty"`
 	ClientId       string `json:"client_id,omitempty"`
 	EmailVerified  bool   `json:"email_verified"`
 	MobileVerified bool   `json:"mobile_verified"`
-	DateCreated    string `json:"date_created"`
 	Expires        int64  `json:"expires"`
+	DateCreated    string `json:"date_created"`
+	DateRevoked    string `json:"date_revoked,omitempty"`
 }
 
 // Web Frontend ClientId: 123
@@ -93,15 +94,15 @@ type AccessToken struct {
 
 func GetNewAccessTokenByUserId(userId string) *AccessToken {
 	return &AccessToken{
-		TokenType:    TokenTypeBearer,
-		AccessToken:  "",
-		RefreshToken: "",
-		UserId:       userId,
-		ClientId:     "",
-		EmailVerified: false,
+		TokenType:      TokenTypeBearer,
+		AccessToken:    "",
+		RefreshToken:   "",
+		UserId:         userId,
+		ClientId:       "",
+		EmailVerified:  false,
 		MobileVerified: false,
-		DateCreated:  date_utils.GetNowDBFormat(),
-		Expires:      time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
+		DateCreated:    date_utils.GetNowDBFormat(),
+		Expires:        time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
 	}
 }
 
