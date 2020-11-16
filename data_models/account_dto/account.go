@@ -43,7 +43,7 @@ func (accountRequest *AccountRequest) Validate() *rest_errors.RestErr {
 	if accountRequest.Type < 0 || accountRequest.Type > 2 {
 		return rest_errors.NewBadRequestError("invalid type field")
 	}
-	if accountRequest.Customer.Id == "" {
+	if accountRequest.Customer.Id.Hex() == "" {
 		return rest_errors.NewBadRequestError("invalid customer id field")
 	}
 	if accountRequest.Customer.Type != accountRequest.Type {
