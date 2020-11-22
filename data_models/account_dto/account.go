@@ -94,6 +94,7 @@ type Account struct {
 	Wallets       []wallet_dao.Wallet    `json:"wallets,omitempty"`
 	Beneficiaries []AccountBeneficiary   `json:"beneficiaries,omitempty"`
 	DateCreated   string                 `json:"date_created"`
+	LastUpdated   string                 `json:"last_updated"`
 }
 
 func (account *Account) Validate() *rest_errors.RestErr {
