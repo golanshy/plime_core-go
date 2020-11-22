@@ -89,9 +89,7 @@ type Account struct {
 	KybStatus     *kyb_dto.KybStatus     `json:"kyb_status,omitempty"`
 	Details       string                 `json:"details,omitempty"`
 	Notes         string                 `json:"notes,omitempty"`
-	Owner         *user_dto.User         `json:"owner,omitempty"`
 	Customer      *customer_dto.Customer `json:"customer,omitempty"`
-	Users         []AccountUser          `json:"users,omitempty"`
 	Address       address_dto.Address    `json:"address,omitempty"`
 	Wallets       []wallet_dao.Wallet    `json:"wallets,omitempty"`
 	Beneficiaries []AccountBeneficiary   `json:"beneficiaries,omitempty"`
@@ -110,16 +108,6 @@ func (account *Account) Validate() *rest_errors.RestErr {
 // 0 = Personal
 // 1 = Self Employed
 // 2 = Company
-
-type AccountUser struct {
-	User user_dto.User `json:"user"`
-	Role int           `json:"role"`
-}
-
-// Role:
-// 0 = Viewer
-// 1 = Owner
-// 2 = Editor
 
 type AccountExchangeRequest struct {
 	Account          Account `json:"payer_account,omitempty"`
