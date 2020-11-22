@@ -25,7 +25,7 @@ type PaymentsRequest struct {
 	Details     string                 `json:"details,omitempty"`
 	Payments    []PublicPaymentRequest `json:"payments,omitempty"`
 	WebHook     WebHook                `json:"web_hook,omitempty"`
-	DateCreated time.Time              `json:"date_created,omitempty"`
+	DateCreated string                 `json:"date_created,omitempty"`
 }
 
 func (request *PublicPaymentsRequest) Validate() *rest_errors.RestErr {

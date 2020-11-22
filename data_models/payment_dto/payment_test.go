@@ -6,7 +6,7 @@ import (
 )
 
 func TestPaymentsRequest_Validate_invalid_reference(t *testing.T) {
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "",
 	}
 	err := request.Validate()
@@ -15,7 +15,7 @@ func TestPaymentsRequest_Validate_invalid_reference(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_invalid_payments(t *testing.T) {
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
 	}
 	err := request.Validate()
@@ -24,10 +24,10 @@ func TestPaymentsRequest_Validate_invalid_payments(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_zero_payments(t *testing.T) {
-	var payments = make([]Payment, 0)
-	var request = PaymentsRequest {
+	var payments = make([]PublicPaymentRequest, 0)
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
@@ -35,9 +35,19 @@ func TestPaymentsRequest_Validate_zero_payments(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_invalid_payment_email(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "",
 		Details:      "",
 		Amount:       0,
@@ -45,39 +55,29 @@ func TestPaymentsRequest_Validate_invalid_payment_email(t *testing.T) {
 		ArriveBy:     "",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
-	assert.EqualValues(t, "invalid email address for payment 0", err.Message)
-}
-
-func TestPaymentsRequest_Validate_invalid_payment_reference(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
-		Reference:    "",
-		Details:      "",
-		Amount:       0,
-		CurrencyCode: "",
-		ArriveBy:     "",
-		SendOn:       "",
-	})
-	var request = PaymentsRequest {
-		Reference: "123",
-		Payments: payments,
-	}
-	err := request.Validate()
-	assert.NotNil(t, err)
-	assert.EqualValues(t, "invalid reference data for payment 0", err.Message)
+	assert.EqualValues(t, "invalid payee email address for payment 0", err.Message)
 }
 
 func TestPaymentsRequest_Validate_invalid_payment_amount(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0,
@@ -85,9 +85,9 @@ func TestPaymentsRequest_Validate_invalid_payment_amount(t *testing.T) {
 		ArriveBy:     "",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
@@ -95,9 +95,19 @@ func TestPaymentsRequest_Validate_invalid_payment_amount(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_invalid_payment_currency_code(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -105,9 +115,9 @@ func TestPaymentsRequest_Validate_invalid_payment_currency_code(t *testing.T) {
 		ArriveBy:     "",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
@@ -115,9 +125,19 @@ func TestPaymentsRequest_Validate_invalid_payment_currency_code(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_no_payment_arrive_by(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -125,18 +145,28 @@ func TestPaymentsRequest_Validate_no_payment_arrive_by(t *testing.T) {
 		ArriveBy:     "",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.Nil(t, err)
 }
 
 func TestPaymentsRequest_Validate_invalid_payment_arrive_by_format(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -144,9 +174,9 @@ func TestPaymentsRequest_Validate_invalid_payment_arrive_by_format(t *testing.T)
 		ArriveBy:     "111",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
@@ -154,9 +184,19 @@ func TestPaymentsRequest_Validate_invalid_payment_arrive_by_format(t *testing.T)
 }
 
 func TestPaymentsRequest_Validate_payment_arrive_by_date_in_past(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -164,9 +204,9 @@ func TestPaymentsRequest_Validate_payment_arrive_by_date_in_past(t *testing.T) {
 		ArriveBy:     "2006-01-01T00:00:00.000Z",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
@@ -174,9 +214,19 @@ func TestPaymentsRequest_Validate_payment_arrive_by_date_in_past(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_valid_payment_arrive_by_date(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -184,9 +234,9 @@ func TestPaymentsRequest_Validate_valid_payment_arrive_by_date(t *testing.T) {
 		ArriveBy:     "2106-01-01T00:00:00.000Z",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.Nil(t, err)
@@ -195,9 +245,19 @@ func TestPaymentsRequest_Validate_valid_payment_arrive_by_date(t *testing.T) {
 // --------------------------------------------------------------------------------
 
 func TestPaymentsRequest_Validate_no_payment_send_on(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -205,18 +265,28 @@ func TestPaymentsRequest_Validate_no_payment_send_on(t *testing.T) {
 		ArriveBy:     "2106-01-01T00:00:00.000Z",
 		SendOn:       "",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.Nil(t, err)
 }
 
 func TestPaymentsRequest_Validate_invalid_payment_send_on_format(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -224,9 +294,9 @@ func TestPaymentsRequest_Validate_invalid_payment_send_on_format(t *testing.T) {
 		ArriveBy:     "2106-01-01T00:00:00.000Z",
 		SendOn:       "111",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
@@ -234,9 +304,19 @@ func TestPaymentsRequest_Validate_invalid_payment_send_on_format(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_payment_arrive_by_send_on_past(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -244,9 +324,9 @@ func TestPaymentsRequest_Validate_payment_arrive_by_send_on_past(t *testing.T) {
 		SendOn:       "2006-01-01T00:00:00.000Z",
 		ArriveBy:     "2106-01-01T00:00:00.000Z",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
@@ -254,9 +334,19 @@ func TestPaymentsRequest_Validate_payment_arrive_by_send_on_past(t *testing.T) {
 }
 
 func TestPaymentsRequest_Validate_valid_payment_send_on_date(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -264,18 +354,28 @@ func TestPaymentsRequest_Validate_valid_payment_send_on_date(t *testing.T) {
 		SendOn:       "2106-01-01T00:00:00.000Z",
 		ArriveBy:     "2106-01-01T00:00:00.001Z",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.Nil(t, err)
 }
 
 func TestPaymentsRequest_Validate_payment_send_on_date_after_arrive_by(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -283,18 +383,28 @@ func TestPaymentsRequest_Validate_payment_send_on_date_after_arrive_by(t *testin
 		SendOn:       "2206-01-01T00:00:00.000Z",
 		ArriveBy:     "2106-01-01T00:00:00.000Z",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.NotNil(t, err)
 }
 
 func TestPaymentsRequest_Validate_payment_send_on_date_before_arrive_by(t *testing.T) {
-	var payments = make([]Payment, 0)
-	payments = append(payments, Payment{
-		Email:        "abc@domain.com",
+	var payments = make([]PublicPaymentRequest, 0)
+	payments = append(payments, PublicPaymentRequest{
+		Payee: Payee{
+			Type:                0,
+			Details:             "",
+			CompanyName:         "",
+			CompanyRegisteredId: "",
+			FirstName:           "",
+			LastName:            "",
+			Email:               "abc@domain.com",
+			Mobile:              "",
+			CountryCode:         "",
+		},
 		Reference:    "456",
 		Details:      "",
 		Amount:       0.01,
@@ -302,9 +412,9 @@ func TestPaymentsRequest_Validate_payment_send_on_date_before_arrive_by(t *testi
 		SendOn:       "2106-01-01T00:00:00.000Z",
 		ArriveBy:     "2206-01-01T00:00:00.000Z",
 	})
-	var request = PaymentsRequest {
+	var request = PublicPaymentsRequest{
 		Reference: "123",
-		Payments: payments,
+		Payments:  payments,
 	}
 	err := request.Validate()
 	assert.Nil(t, err)

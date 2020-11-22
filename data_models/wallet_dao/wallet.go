@@ -50,7 +50,7 @@ type RestrictedWallet struct {
 	PaymentReference string             `json:"payment_reference,omitempty"`
 	PayerId          string             `json:"payer_id,omitempty"`
 	PayerName        string             `json:"payer_name,omitempty"`
-	CreatedAt        time.Time          `json:"created_at,omitempty"`
+	CreatedAt        string             `json:"created_at,omitempty"`
 }
 
 type RestrictedWalletRequest struct {
