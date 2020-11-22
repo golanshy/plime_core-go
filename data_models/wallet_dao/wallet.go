@@ -21,6 +21,7 @@ type Wallet struct {
 	IbanStatus       string            `json:"iban_status,omitempty"`
 	Amount           float64           `json:"amount"`
 	CreatedAt        time.Time         `json:"created_at,omitempty"`
+	LastUpdated      string            `json:"last_updated"`
 	CountryCode      string            `json:"country_code,omitempty"`
 	UkSortCode       string            `json:"uk_sort_code,omitempty"`
 	UkAccountNumber  string            `json:"uk_account_number,omitempty"`
@@ -50,7 +51,7 @@ type RestrictedWallet struct {
 	PaymentReference string             `json:"payment_reference,omitempty"`
 	PayerId          string             `json:"payer_id,omitempty"`
 	PayerName        string             `json:"payer_name,omitempty"`
-	CreatedAt        time.Time         `json:"created_at,omitempty"`
+	CreatedAt        time.Time          `json:"created_at,omitempty"`
 }
 
 type RestrictedWalletRequest struct {
