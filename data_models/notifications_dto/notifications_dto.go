@@ -6,13 +6,14 @@ import (
 )
 
 type NotificationRequest struct {
-	Channel     string  `json:"channel"`
-	UserIds     []string `json:"user_ids"`
-	Subject     string  `json:"subject,omitempty"`
-	HtmlMessage string  `json:"html_message,omitempty"`
-	Message     string  `json:"message,omitempty"`
-	Payload     string  `json:"payload,omitempty"`
-	DateCreated string  `json:"date_created"`
+	Channel      string   `json:"channel"`
+	UserIds      []string `json:"user_ids"`
+	Destinations []string `json:"destinations,omitempty"`
+	Subject      string   `json:"subject,omitempty"`
+	HtmlMessage  string   `json:"html_message,omitempty"`
+	Message      string   `json:"message,omitempty"`
+	Payload      string   `json:"payload,omitempty"`
+	DateCreated  string   `json:"date_created"`
 }
 
 const (
