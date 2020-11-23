@@ -52,6 +52,7 @@ type RestrictedWallet struct {
 	PayerId          string             `json:"payer_id,omitempty"`
 	PayerName        string             `json:"payer_name,omitempty"`
 	CreatedAt        time.Time          `json:"created_at,omitempty"`
+	LastUpdated      time.Time          `json:"last_updated"`
 }
 
 type RestrictedWalletRequest struct {
