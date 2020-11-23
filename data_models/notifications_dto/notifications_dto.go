@@ -24,14 +24,14 @@ const (
 )
 
 func (r *NotificationRequest) Validate() *rest_errors.RestErr {
-	if len(r.UserIds) == 0 {
-		return rest_errors.NewBadRequestError("missing recipients")
+	if len(r.UserIds) == 0 && len(r.Destinations) == 0 {
+		return rest_errors.NewBadRequestError("invalid user ids or destinations")
 	}
 	if strings.TrimSpace(r.Message) == "" && strings.TrimSpace(r.Channel) == "" {
-		return rest_errors.NewBadRequestError("missing channel")
+		return rest_errors.NewBadRequestError("invalid channel")
 	}
 	if strings.TrimSpace(r.Message) == "" && strings.TrimSpace(r.Payload) == "" {
-		return rest_errors.NewBadRequestError("missing message or payload")
+		return rest_errors.NewBadRequestError("invalid message or payload")
 	}
 	return nil
 }
