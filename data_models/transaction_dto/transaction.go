@@ -11,6 +11,7 @@ type Transaction struct {
 
 type TransactionResult struct {
 	Id                  primitive.ObjectID                                       `json:"id,omitempty" bson:"_id, omitempty"`
+	BankingId           string                                                   `json:"banking_id"`
 	Status              string                                                   `json:"status"`
 	CreatedAt           time.Time                                                `json:"created_at"`
 	TransactionFee      float64                                                  `json:"transaction_fee,omitempty"`
