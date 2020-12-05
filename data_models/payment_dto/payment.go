@@ -88,19 +88,30 @@ func (request *PublicPaymentsRequest) Validate() *rest_errors.RestErr {
 }
 
 type PublicPaymentRequest struct {
-	Type         int64                  `json:"type"`
-	Reference    string                 `json:"reference"`
-	Details      string                 `json:"details"`
-	Amount       float64                `json:"amount"`
-	CurrencyCode string                 `json:"currency_code"`
-	Payer        *customer_dto.Customer `json:"payer,omitempty"`
-	Payee        Payee                  `json:"payee"`
-	UserSecrets  []UserSecret           `json:"user_secrets,omitempty"`
-	RestrictedTo string                 `json:"restricted_to,omitempty"`
-	SendOn       string                 `json:"send_on,omitempty"`
-	ArriveBy     string                 `json:"arrive_by,omitempty"`
-	Status       string                 `json:"status,omitempty"`
-	DateCreated  time.Time              `json:"date_created,omitempty"`
+	Type              int64                  `json:"type"`
+	Reference         string                 `json:"reference"`
+	Details           string                 `json:"details"`
+	Amount            float64                `json:"amount"`
+	CurrencyCode      string                 `json:"currency_code"`
+	Payer             *customer_dto.Customer `json:"payer,omitempty"`
+	Payee             Payee                  `json:"payee"`
+	UserSecrets       []UserSecret           `json:"user_secrets,omitempty"`
+	RestrictedPayment *RestrictedPayment     `json:"restricted_payment,omitempty"`
+	SendOn            string                 `json:"send_on,omitempty"`
+	ArriveBy          string                 `json:"arrive_by,omitempty"`
+	Status            string                 `json:"status,omitempty"`
+	DateCreated       time.Time              `json:"date_created,omitempty"`
+}
+
+const (
+	RestrictedByBeneficiariesList string = "restricted_by_beneficiaries_list"
+	RestrictedBySector            string = "restricted_by_sector"
+)
+
+type RestrictedPayment struct {
+	RestrictedBy        string `json:"restricted_by,omitempty"`
+	BeneficiariesListId string `json:"beneficiaries_list_id,omitempty"`
+	SectorId            string `json:"sector_id,omitempty"`
 }
 
 type PaymentRequest struct {
@@ -145,6 +156,30 @@ func (paymentRequest *PublicPaymentRequest) Validate() *rest_errors.RestErr {
 			}
 			if strings.TrimSpace(secret.Value) == "" {
 				return rest_errors.NewBadRequestError("invalid user secret value field")
+			}
+		}
+	}
+	if paymentRequest.RestrictedPayment != nil {
+
+		paymentRequest.RestrictedPayment.RestrictedBy = strings.TrimSpace(paymentRequest.RestrictedPayment.RestrictedBy)
+		paymentRequest.RestrictedPayment.BeneficiariesListId = strings.TrimSpace(paymentRequest.RestrictedPayment.BeneficiariesListId)
+		paymentRequest.RestrictedPayment.SectorId = strings.TrimSpace(paymentRequest.RestrictedPayment.SectorId)
+
+		if paymentRequest.RestrictedPayment.RestrictedBy == "" {
+			return rest_errors.NewBadRequestError("invalid restricted field")
+		}
+		if paymentRequest.RestrictedPayment.RestrictedBy != RestrictedByBeneficiariesList &&
+			paymentRequest.RestrictedPayment.RestrictedBy != RestrictedBySector {
+			return rest_errors.NewBadRequestError("invalid restricted field type")
+		}
+		if paymentRequest.RestrictedPayment.RestrictedBy == RestrictedByBeneficiariesList {
+			if strings.TrimSpace(paymentRequest.RestrictedPayment.BeneficiariesListId) == "" {
+				return rest_errors.NewBadRequestError("invalid restricted beneficiaries list")
+			}
+		}
+		if paymentRequest.RestrictedPayment.RestrictedBy == RestrictedBySector {
+			if strings.TrimSpace(paymentRequest.RestrictedPayment.SectorId) == "" {
+				return rest_errors.NewBadRequestError("invalid restricted sector")
 			}
 		}
 	}

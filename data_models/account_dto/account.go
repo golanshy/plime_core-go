@@ -7,7 +7,6 @@ import (
 	"github.com/golanshy/plime_core-go/data_models/kyb_dto"
 	"github.com/golanshy/plime_core-go/data_models/kyc_dto"
 	"github.com/golanshy/plime_core-go/data_models/payment_dto"
-	"github.com/golanshy/plime_core-go/data_models/user_dto"
 	"github.com/golanshy/plime_core-go/data_models/wallet_dao"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -126,8 +125,65 @@ func (request *AccountExchangeRequest) Validate() *rest_errors.RestErr {
 }
 
 type AccountBeneficiary struct {
-	User    user_dto.User `json:"user"`
-	Account Account       `json:"payer_account"`
+	Type                  int64               `json:"type"`
+	Name                  string              `json:"name,omitempty"`
+	Details               string              `json:"details,omitempty"`
+	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
+	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
+	Address               address_dto.Address `json:"address,omitempty"`
+	Email                 string              `json:"email,omitempty"`
+	UkAccountNumber       string              `json:"uk_account_number,omitempty"`
+	UkSortCode            string              `json:"uk_sort_code,omitempty"`
+	Iban                  string              `json:"iban,omitempty"`
+	BicSwift              string              `json:"bic_swift,omitempty"`
+	BankCountry           string              `json:"bank_country,omitempty"`
+	BankName              string              `json:"bank_name,omitempty"`
+}
+
+func (accountBeneficiary *AccountBeneficiary) Trim() {
+	accountBeneficiary.Name = strings.TrimSpace(accountBeneficiary.Name)
+	accountBeneficiary.Details = strings.TrimSpace(accountBeneficiary.Details)
+	accountBeneficiary.CompanyRegisteredName = strings.TrimSpace(accountBeneficiary.CompanyRegisteredName)
+	accountBeneficiary.CompanyRegisteredId = strings.TrimSpace(accountBeneficiary.CompanyRegisteredId)
+	accountBeneficiary.Address.Trim()
+	accountBeneficiary.Email = strings.TrimSpace(accountBeneficiary.Email)
+	accountBeneficiary.UkAccountNumber = strings.TrimSpace(accountBeneficiary.UkAccountNumber)
+	accountBeneficiary.UkSortCode = strings.TrimSpace(accountBeneficiary.UkSortCode)
+	accountBeneficiary.Iban = strings.TrimSpace(accountBeneficiary.Iban)
+	accountBeneficiary.BicSwift = strings.TrimSpace(accountBeneficiary.BicSwift)
+	accountBeneficiary.BankCountry = strings.TrimSpace(accountBeneficiary.BankCountry)
+	accountBeneficiary.BankName = strings.TrimSpace(accountBeneficiary.BankName)
+}
+
+func (accountBeneficiary *AccountBeneficiary) Validate() *rest_errors.RestErr {
+	accountBeneficiary.Trim()
+	if accountBeneficiary.Type < 0 || accountBeneficiary.Type > 2 {
+		return rest_errors.NewBadRequestError("invalid beneficiary type")
+	}
+	if accountBeneficiary.Name == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary name")
+	}
+	if accountBeneficiary.UkAccountNumber == "" && accountBeneficiary.UkSortCode == "" {
+		if accountBeneficiary.Iban == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary iban")
+		}
+		if accountBeneficiary.BicSwift == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary bic swift")
+		}
+		if accountBeneficiary.BankCountry == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary bank country")
+		}
+		if accountBeneficiary.BankName == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary bank name")
+		}
+	}
+	if accountBeneficiary.UkAccountNumber == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary uk account number")
+	}
+	if accountBeneficiary.UkSortCode == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary uk sort code")
+	}
+	return nil
 }
 
 type AccountBeneficiaryPaymentRequest struct {
