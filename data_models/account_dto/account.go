@@ -126,6 +126,7 @@ func (request *AccountExchangeRequest) Validate() *rest_errors.RestErr {
 
 type AccountBeneficiary struct {
 	Type                  int64               `json:"type"`
+	HolderId              string              `json:"holder_id"`
 	Name                  string              `json:"name,omitempty"`
 	Details               string              `json:"details,omitempty"`
 	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
@@ -141,6 +142,7 @@ type AccountBeneficiary struct {
 }
 
 func (accountBeneficiary *AccountBeneficiary) Trim() {
+	accountBeneficiary.HolderId = strings.TrimSpace(accountBeneficiary.HolderId)
 	accountBeneficiary.Name = strings.TrimSpace(accountBeneficiary.Name)
 	accountBeneficiary.Details = strings.TrimSpace(accountBeneficiary.Details)
 	accountBeneficiary.CompanyRegisteredName = strings.TrimSpace(accountBeneficiary.CompanyRegisteredName)
@@ -159,6 +161,9 @@ func (accountBeneficiary *AccountBeneficiary) Validate() *rest_errors.RestErr {
 	accountBeneficiary.Trim()
 	if accountBeneficiary.Type < 0 || accountBeneficiary.Type > 2 {
 		return rest_errors.NewBadRequestError("invalid beneficiary type")
+	}
+	if accountBeneficiary.HolderId == "" {
+		return rest_errors.NewBadRequestError("invalid holder id")
 	}
 	if accountBeneficiary.Name == "" {
 		return rest_errors.NewBadRequestError("invalid beneficiary name")
