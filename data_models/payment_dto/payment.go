@@ -124,7 +124,7 @@ type PaymentRequest struct {
 	Payer              customer_dto.Customer                `json:"payer"`
 	Payee              Payee                                `json:"payee"`
 	UserSecrets        []UserSecret                         `json:"user_secrets,omitempty"`
-	RestrictedTo       string                               `json:"restricted_to,omitempty"`
+	RestrictedPayment  *RestrictedPayment                   `json:"restricted_payment,omitempty"`
 	SendOn             string                               `json:"send_on,omitempty"`
 	ArriveBy           string                               `json:"arrive_by,omitempty"`
 	WebHook            WebHook                              `json:"web_hook,omitempty"`
