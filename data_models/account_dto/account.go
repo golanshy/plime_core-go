@@ -126,7 +126,9 @@ func (request *AccountExchangeRequest) Validate() *rest_errors.RestErr {
 
 type AccountBeneficiary struct {
 	Type                  int64               `json:"type"`
+	IsInternational       bool                `json:"is_international"`
 	HolderId              string              `json:"holder_id"`
+	CurrencyCode          string              `json:"currency_code"`
 	Name                  string              `json:"name,omitempty"`
 	Details               string              `json:"details,omitempty"`
 	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
@@ -163,12 +165,27 @@ func (accountBeneficiary *AccountBeneficiary) Validate() *rest_errors.RestErr {
 		return rest_errors.NewBadRequestError("invalid beneficiary type")
 	}
 	if accountBeneficiary.HolderId == "" {
-		return rest_errors.NewBadRequestError("invalid holder id")
+		return rest_errors.NewBadRequestError("invalid beneficiary holder id")
 	}
-	if accountBeneficiary.Name == "" {
-		return rest_errors.NewBadRequestError("invalid beneficiary name")
+	if accountBeneficiary.Type == 2 {
+		if accountBeneficiary.CompanyRegisteredName == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary company name")
+		}
+		if accountBeneficiary.CompanyRegisteredId == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary company id")
+		}
+	} else {
+		if accountBeneficiary.Name == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary name")
+		}
 	}
-	if accountBeneficiary.UkAccountNumber == "" && accountBeneficiary.UkSortCode == "" {
+	if accountBeneficiary.Email == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary email")
+	}
+	if accountBeneficiary.CurrencyCode == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary currency code")
+	}
+	if accountBeneficiary.IsInternational {
 		if accountBeneficiary.Iban == "" {
 			return rest_errors.NewBadRequestError("invalid beneficiary iban")
 		}
@@ -181,12 +198,13 @@ func (accountBeneficiary *AccountBeneficiary) Validate() *rest_errors.RestErr {
 		if accountBeneficiary.BankName == "" {
 			return rest_errors.NewBadRequestError("invalid beneficiary bank name")
 		}
-	}
-	if accountBeneficiary.UkAccountNumber == "" {
-		return rest_errors.NewBadRequestError("invalid beneficiary uk account number")
-	}
-	if accountBeneficiary.UkSortCode == "" {
-		return rest_errors.NewBadRequestError("invalid beneficiary uk sort code")
+	} else {
+		if accountBeneficiary.UkAccountNumber == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary uk account number")
+		}
+		if accountBeneficiary.UkSortCode == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary uk sort code")
+		}
 	}
 	return nil
 }

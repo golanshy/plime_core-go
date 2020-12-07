@@ -6,6 +6,8 @@ import (
 
 type RailsBankBeneficiaryRequest struct {
 	HolderId        string                                   `json:"holder_id"`
+	AssetClass      string                                   `json:"asset_class"`
+	AssetType       string                                   `json:"asset_type"`
 	UkAccountNumber string                                   `json:"uk_account_number,omitempty"`
 	UkSortCode      string                                   `json:"uk_sort_code,omitempty"`
 	Iban            string                                   `json:"iban,omitempty"`
