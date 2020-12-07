@@ -16,10 +16,15 @@ type RailsBankBeneficiaryRequest struct {
 	BankName        string                                   `json:"bank_name,omitempty"`
 	Person          *rails_bank_enduser_dto.RailsBankPerson  `json:"person,omitempty"`
 	Company         *rails_bank_enduser_dto.RailsBankCompany `json:"company,omitempty"`
+	BeneficiaryMeta *RailsBankBeneficiaryMeta                `json:"beneficiary_meta,omitempty"`
 }
 
 type RailsBankBeneficiaryId struct {
 	BeneficiaryId string `json:"beneficiary_id"`
+}
+
+type RailsBankBeneficiaryMeta struct {
+	Details string `json:"details,omitempty"`
 }
 
 type RailsBankBeneficiaryResponse struct {
