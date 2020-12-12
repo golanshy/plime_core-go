@@ -77,6 +77,7 @@ type AccountsResult struct {
 
 type Account struct {
 	Id            primitive.ObjectID     `json:"id,omitempty" bson:"_id, omitempty"`
+	Customer      *customer_dto.Customer `json:"customer,omitempty"`
 	BankingId     string                 `json:"banking_id,omitempty"`
 	Email         string                 `json:"email,omitempty"`
 	Name          string                 `json:"name,omitempty"`
@@ -84,7 +85,6 @@ type Account struct {
 	Suspended     bool                   `json:"suspended,omitempty"`
 	Details       string                 `json:"details,omitempty"`
 	Notes         string                 `json:"notes,omitempty"`
-	Customer      *customer_dto.Customer `json:"customer,omitempty"`
 	Address       address_dto.Address    `json:"address,omitempty"`
 	Wallets       []wallet_dao.Wallet    `json:"wallets,omitempty"`
 	Beneficiaries []AccountBeneficiary   `json:"beneficiaries,omitempty"`
@@ -121,26 +121,28 @@ func (request *AccountExchangeRequest) Validate() *rest_errors.RestErr {
 }
 
 type AccountBeneficiary struct {
-	Type                  int64               `json:"type"`
-	IsInternational       bool                `json:"is_international"`
-	HolderId              string              `json:"holder_id"`
-	CurrencyCode          string              `json:"currency_code"`
-	Name                  string              `json:"name,omitempty"`
-	Details               string              `json:"details,omitempty"`
-	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
-	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
-	Address               address_dto.Address `json:"address,omitempty"`
-	Email                 string              `json:"email,omitempty"`
-	UkAccountNumber       string              `json:"uk_account_number,omitempty"`
-	UkSortCode            string              `json:"uk_sort_code,omitempty"`
-	Iban                  string              `json:"iban,omitempty"`
-	BicSwift              string              `json:"bic_swift,omitempty"`
-	BankCountry           string              `json:"bank_country,omitempty"`
-	BankName              string              `json:"bank_name,omitempty"`
+	Id                    primitive.ObjectID    `json:"id,omitempty" bson:"_id, omitempty"`
+	Type                  int64                 `json:"type"`
+	BeneficiaryOf         customer_dto.Customer `json:"beneficiary_of,omitempty"`
+	BankingId             string                `json:"banking_id,omitempty"`
+	IsInternational       bool                  `json:"is_international"`
+	CurrencyCode          string                `json:"currency_code"`
+	Name                  string                `json:"name,omitempty"`
+	Details               string                `json:"details,omitempty"`
+	CompanyRegisteredName string                `json:"company_registered_name,omitempty"`
+	CompanyRegisteredId   string                `json:"company_registered_id,omitempty"`
+	Address               address_dto.Address   `json:"address,omitempty"`
+	Email                 string                `json:"email,omitempty"`
+	UkAccountNumber       string                `json:"uk_account_number,omitempty"`
+	UkSortCode            string                `json:"uk_sort_code,omitempty"`
+	Iban                  string                `json:"iban,omitempty"`
+	BicSwift              string                `json:"bic_swift,omitempty"`
+	BankCountry           string                `json:"bank_country,omitempty"`
+	BankName              string                `json:"bank_name,omitempty"`
 }
 
 func (accountBeneficiary *AccountBeneficiary) Trim() {
-	accountBeneficiary.HolderId = strings.TrimSpace(accountBeneficiary.HolderId)
+	accountBeneficiary.BankingId = strings.TrimSpace(accountBeneficiary.BankingId)
 	accountBeneficiary.Name = strings.TrimSpace(accountBeneficiary.Name)
 	accountBeneficiary.Details = strings.TrimSpace(accountBeneficiary.Details)
 	accountBeneficiary.CompanyRegisteredName = strings.TrimSpace(accountBeneficiary.CompanyRegisteredName)
@@ -157,11 +159,11 @@ func (accountBeneficiary *AccountBeneficiary) Trim() {
 
 func (accountBeneficiary *AccountBeneficiary) Validate() *rest_errors.RestErr {
 	accountBeneficiary.Trim()
+	if beneficiaryOfErr := accountBeneficiary.BeneficiaryOf.Validate(); beneficiaryOfErr != nil {
+		return rest_errors.NewBadRequestError("invalid beneficiary of data")
+	}
 	if accountBeneficiary.Type < 0 || accountBeneficiary.Type > 2 {
 		return rest_errors.NewBadRequestError("invalid beneficiary type")
-	}
-	if accountBeneficiary.HolderId == "" {
-		return rest_errors.NewBadRequestError("invalid beneficiary holder id")
 	}
 	if accountBeneficiary.Type == 2 {
 		if accountBeneficiary.CompanyRegisteredName == "" {
