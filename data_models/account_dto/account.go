@@ -159,8 +159,9 @@ func (accountBeneficiary *AccountBeneficiary) Trim() {
 
 func (accountBeneficiary *AccountBeneficiary) Validate() *rest_errors.RestErr {
 	accountBeneficiary.Trim()
-	if beneficiaryOfErr := accountBeneficiary.BeneficiaryOf.Validate(); beneficiaryOfErr != nil {
-		return rest_errors.NewBadRequestError("invalid beneficiary of data")
+	beneficiaryOfId := strings.TrimSpace(accountBeneficiary.BeneficiaryOf.Id.Hex())
+	if beneficiaryOfId == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary of id")
 	}
 	if accountBeneficiary.Type < 0 || accountBeneficiary.Type > 2 {
 		return rest_errors.NewBadRequestError("invalid beneficiary type")
