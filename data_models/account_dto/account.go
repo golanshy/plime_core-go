@@ -120,6 +120,69 @@ func (request *AccountExchangeRequest) Validate() *rest_errors.RestErr {
 	return nil
 }
 
+type AccountBeneficiaryRequest struct {
+	Type                  int64               `json:"type"`
+	HolderId              string              `json:"holder_id"`
+	CurrencyCode          string              `json:"currency_code"`
+	Name                  string              `json:"name,omitempty"`
+	Details               string              `json:"details,omitempty"`
+	CompanyRegisteredName string              `json:"company_registered_name,omitempty"`
+	CompanyRegisteredId   string              `json:"company_registered_id,omitempty"`
+	Address               address_dto.Address `json:"address,omitempty"`
+	Email                 string              `json:"email,omitempty"`
+	UkAccountNumber       string              `json:"uk_account_number,omitempty"`
+	UkSortCode            string              `json:"uk_sort_code,omitempty"`
+	Iban                  string              `json:"iban,omitempty"`
+	BicSwift              string              `json:"bic_swift,omitempty"`
+	BankCountry           string              `json:"bank_country,omitempty"`
+	BankName              string              `json:"bank_name,omitempty"`
+}
+
+func (accountBeneficiary *AccountBeneficiaryRequest) Trim() {
+	accountBeneficiary.HolderId = strings.TrimSpace(accountBeneficiary.HolderId)
+	accountBeneficiary.Name = strings.TrimSpace(accountBeneficiary.Name)
+	accountBeneficiary.Details = strings.TrimSpace(accountBeneficiary.Details)
+	accountBeneficiary.CompanyRegisteredName = strings.TrimSpace(accountBeneficiary.CompanyRegisteredName)
+	accountBeneficiary.CompanyRegisteredId = strings.TrimSpace(accountBeneficiary.CompanyRegisteredId)
+	accountBeneficiary.Address.Trim()
+	accountBeneficiary.Email = strings.TrimSpace(accountBeneficiary.Email)
+	accountBeneficiary.UkAccountNumber = strings.TrimSpace(accountBeneficiary.UkAccountNumber)
+	accountBeneficiary.UkSortCode = strings.TrimSpace(accountBeneficiary.UkSortCode)
+	accountBeneficiary.Iban = strings.TrimSpace(accountBeneficiary.Iban)
+	accountBeneficiary.BicSwift = strings.TrimSpace(accountBeneficiary.BicSwift)
+	accountBeneficiary.BankCountry = strings.TrimSpace(accountBeneficiary.BankCountry)
+	accountBeneficiary.BankName = strings.TrimSpace(accountBeneficiary.BankName)
+}
+
+func (request *AccountBeneficiaryRequest) Validate() *rest_errors.RestErr {
+	request.Trim()
+	if request.Type < 0 || request.Type > 2 {
+		return rest_errors.NewBadRequestError("invalid beneficiary type")
+	}
+	if request.Type == 2 {
+		if request.CompanyRegisteredName == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary company name")
+		}
+		if request.CompanyRegisteredId == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary company id")
+		}
+	} else {
+		if request.Name == "" {
+			return rest_errors.NewBadRequestError("invalid beneficiary name")
+		}
+	}
+	if request.HolderId == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary holder id")
+	}
+	if request.Email == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary email")
+	}
+	if request.CurrencyCode == "" {
+		return rest_errors.NewBadRequestError("invalid beneficiary currency code")
+	}
+	return nil
+}
+
 type AccountBeneficiary struct {
 	Id                    primitive.ObjectID    `json:"id,omitempty" bson:"_id, omitempty"`
 	Type                  int64                 `json:"type"`
