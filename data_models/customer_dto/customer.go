@@ -73,6 +73,7 @@ type Customer struct {
 	Status                string              `json:"status,omitempty"`
 	Address               address_dto.Address `json:"address,omitempty"`
 	CustomerUsers         []CustomerUser      `json:"customer_users,omitempty"`
+	FeatureFlags          []string            `json:"feature_flags,omitempty"`
 	DateCreated           string              `json:"date_created,omitempty"`
 }
 

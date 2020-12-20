@@ -184,33 +184,36 @@ func (request *AccountBeneficiaryRequest) Validate() *rest_errors.RestErr {
 }
 
 type AccountBeneficiary struct {
-	Id                    primitive.ObjectID    `json:"id,omitempty" bson:"_id, omitempty"`
-	Type                  int64                 `json:"type"`
-	BeneficiaryOf         customer_dto.Customer `json:"beneficiary_of,omitempty"`
-	BankingId             string                `json:"banking_id,omitempty"`
-	IsInternational       bool                  `json:"is_international"`
-	CurrencyCode          string                `json:"currency_code"`
-	Name                  string                `json:"name,omitempty"`
-	Details               string                `json:"details,omitempty"`
-	CompanyRegisteredName string                `json:"company_registered_name,omitempty"`
-	CompanyRegisteredId   string                `json:"company_registered_id,omitempty"`
-	Address               address_dto.Address   `json:"address,omitempty"`
-	Email                 string                `json:"email,omitempty"`
-	UkAccountNumber       string                `json:"uk_account_number,omitempty"`
-	UkSortCode            string                `json:"uk_sort_code,omitempty"`
-	Iban                  string                `json:"iban,omitempty"`
-	BicSwift              string                `json:"bic_swift,omitempty"`
-	BankCountry           string                `json:"bank_country,omitempty"`
-	BankName              string                `json:"bank_name,omitempty"`
+	Id                    primitive.ObjectID   `json:"id,omitempty" bson:"_id, omitempty"`
+	Type                  int64                `json:"type"`
+	CustomerId            string               `json:"customer_id"`
+	BankingId             string               `json:"banking_id,omitempty"`
+	IsInternational       bool                 `json:"is_international"`
+	CurrencyCode          string               `json:"currency_code"`
+	Name                  string               `json:"name,omitempty"`
+	Details               string               `json:"details,omitempty"`
+	CompanyRegisteredName string               `json:"company_registered_name,omitempty"`
+	CompanyRegisteredId   string               `json:"company_registered_id,omitempty"`
+	Address               *address_dto.Address `json:"address,omitempty"`
+	Email                 string               `json:"email,omitempty"`
+	UkAccountNumber       string               `json:"uk_account_number,omitempty"`
+	UkSortCode            string               `json:"uk_sort_code,omitempty"`
+	Iban                  string               `json:"iban,omitempty"`
+	BicSwift              string               `json:"bic_swift,omitempty"`
+	BankCountry           string               `json:"bank_country,omitempty"`
+	BankName              string               `json:"bank_name,omitempty"`
 }
 
 func (accountBeneficiary *AccountBeneficiary) Trim() {
+	accountBeneficiary.CustomerId = strings.TrimSpace(accountBeneficiary.CustomerId)
 	accountBeneficiary.BankingId = strings.TrimSpace(accountBeneficiary.BankingId)
 	accountBeneficiary.Name = strings.TrimSpace(accountBeneficiary.Name)
 	accountBeneficiary.Details = strings.TrimSpace(accountBeneficiary.Details)
 	accountBeneficiary.CompanyRegisteredName = strings.TrimSpace(accountBeneficiary.CompanyRegisteredName)
 	accountBeneficiary.CompanyRegisteredId = strings.TrimSpace(accountBeneficiary.CompanyRegisteredId)
-	accountBeneficiary.Address.Trim()
+	if accountBeneficiary.Address != nil {
+		accountBeneficiary.Address.Trim()
+	}
 	accountBeneficiary.Email = strings.TrimSpace(accountBeneficiary.Email)
 	accountBeneficiary.UkAccountNumber = strings.TrimSpace(accountBeneficiary.UkAccountNumber)
 	accountBeneficiary.UkSortCode = strings.TrimSpace(accountBeneficiary.UkSortCode)
@@ -222,8 +225,7 @@ func (accountBeneficiary *AccountBeneficiary) Trim() {
 
 func (accountBeneficiary *AccountBeneficiary) Validate() *rest_errors.RestErr {
 	accountBeneficiary.Trim()
-	beneficiaryOfId := strings.TrimSpace(accountBeneficiary.BeneficiaryOf.Id.Hex())
-	if beneficiaryOfId == "" {
+	if accountBeneficiary.CustomerId == "" {
 		return rest_errors.NewBadRequestError("invalid beneficiary of id")
 	}
 	if accountBeneficiary.Type < 0 || accountBeneficiary.Type > 2 {
