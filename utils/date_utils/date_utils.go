@@ -7,7 +7,7 @@ import (
 
 const (
 	apiDateFormat  = "2006-01-02T15:04:05.000Z"
-	apiSdLayout = "2006-01-02 15:04:05"
+	//apiSdLayout = "2006-01-02 15:04:05"
 )
 
 func GetNow() time.Time {
@@ -16,10 +16,6 @@ func GetNow() time.Time {
 
 func GetNowString() string {
 	return GetNow().Format(apiDateFormat)
-}
-
-func GetNowDBFormat() string {
-	return GetNow().Format(apiSdLayout)
 }
 
 func FormatAPITime(value string) (*time.Time, *rest_errors.RestErr) {
