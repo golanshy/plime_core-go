@@ -22,7 +22,7 @@ func GetMobileCodeByEmail(email string) *MobileCode {
 	return &MobileCode{
 		Code:        0,
 		Email:       email,
-		DateCreated: date_utils.GetNowDBFormat(),
+		DateCreated: date_utils.GetNowString(),
 		Expires:     time.Now().UTC().Add(expirationTime * time.Minute).Unix(),
 	}
 }

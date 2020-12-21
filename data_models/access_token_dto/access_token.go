@@ -101,7 +101,7 @@ func GetNewAccessTokenByUserId(userId string) *AccessToken {
 		ClientId:       "",
 		EmailVerified:  false,
 		MobileVerified: false,
-		DateCreated:    date_utils.GetNowDBFormat(),
+		DateCreated:    date_utils.GetNowString(),
 		Expires:        time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
 	}
 }
@@ -113,7 +113,7 @@ func GetNewAccessTokenByClientId(clientId string) *AccessToken {
 		RefreshToken: "",
 		UserId:       "",
 		ClientId:     clientId,
-		DateCreated:  date_utils.GetNowDBFormat(),
+		DateCreated:  date_utils.GetNowString(),
 		Expires:      time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
 	}
 }

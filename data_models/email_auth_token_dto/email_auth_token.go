@@ -23,7 +23,7 @@ func GetNewEmailAuthTokenByEmail(email string) *AuthToken {
 	return &AuthToken{
 		EmailAuthToken: "",
 		Email:          email,
-		DateCreated:    date_utils.GetNowDBFormat(),
+		DateCreated:    date_utils.GetNowString(),
 		Expires:        time.Now().UTC().Add(expirationTime * time.Minute).Unix(),
 	}
 }

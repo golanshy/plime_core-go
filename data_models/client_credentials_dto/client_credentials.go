@@ -47,7 +47,7 @@ func NewClientCredentials(request ClientCredentialsCreateRequest) ClientCredenti
 		AppDetails:   request.AppDetails,
 		ClientSecret: crypto_utils.GenerateSecret(SecretLength),
 		GrantType:    GrantTypeClientCredentials,
-		DateCreated:  date_utils.GetNowDBFormat(),
+		DateCreated:  date_utils.GetNowString(),
 	}
 }
 
