@@ -7,18 +7,42 @@ import (
 	"github.com/golanshy/plime_core-go/utils/date_utils"
 	"github.com/golanshy/plime_core-go/utils/rest_errors"
 	"math/rand"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 )
 
 const (
-	accessTokenLength          = 32
-	expirationTime             = 24
 	TokenTypeBearer            = "bearer"
 	GrantTypeClientCredentials = "client_credentials"
 	GrantTypeRefreshToken      = "refresh_token"
 	GrantTypePassword          = "password"
 )
+
+var (
+	accessTokenLength int64
+	expirationTime    int64
+)
+
+func init() {
+	accessTokenLengthFromEnv := os.Getenv("AUTH_ACCESS_TOKEN_LENGTH")
+	expirationTimeFromEnv := os.Getenv("AUTH_ACCESS_TOKEN_EXPIRATION_TIME")
+
+	var err error
+	if accessTokenLengthFromEnv != "" {
+		accessTokenLength, err = strconv.ParseInt(accessTokenLengthFromEnv, 10, 64)
+		if err != nil {
+			accessTokenLength = 128
+		}
+	}
+	if expirationTimeFromEnv != "" {
+		expirationTime, err = strconv.ParseInt(expirationTimeFromEnv, 10, 64)
+		if err != nil {
+			expirationTime = 24
+		}
+	}
+}
 
 type AccessTokenRequest struct {
 	TokenType string `json:"token_type"`
@@ -102,7 +126,7 @@ func GetNewAccessTokenByUserId(userId string) *AccessToken {
 		EmailVerified:  false,
 		MobileVerified: false,
 		DateCreated:    date_utils.GetNowString(),
-		Expires:        time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
+		Expires:        time.Now().UTC().Add(time.Duration(expirationTime * int64(time.Hour))).Unix(),
 	}
 }
 
@@ -114,7 +138,7 @@ func GetNewAccessTokenByClientId(clientId string) *AccessToken {
 		UserId:       "",
 		ClientId:     clientId,
 		DateCreated:  date_utils.GetNowString(),
-		Expires:      time.Now().UTC().Add(expirationTime * time.Hour).Unix(),
+		Expires:      time.Now().UTC().Add(time.Duration(expirationTime * int64(time.Hour))).Unix(),
 	}
 }
 
@@ -157,7 +181,7 @@ func (at *AccessToken) Validate() *rest_errors.RestErr {
 }
 
 func (at *AccessToken) UpdateExpirationTime() {
-	at.Expires = time.Now().UTC().Add(expirationTime * time.Hour).Unix()
+	at.Expires = time.Now().UTC().Add(time.Duration(expirationTime * int64(time.Hour))).Unix()
 }
 
 func (at *AccessToken) CreateAuthorizedAccessToken(user *user_dto.User) {
