@@ -23,6 +23,7 @@ type CustomersResult struct {
 
 type Customer struct {
 	Id                    primitive.ObjectID  `json:"id,omitempty" bson:"_id, omitempty"`
+	BankingId             string              `json:"banking_id,omitempty"`
 	Type                  int64               `json:"type"`
 	Name                  string              `json:"name,omitempty"`
 	Details               string              `json:"details,omitempty"`
