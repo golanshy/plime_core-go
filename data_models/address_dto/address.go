@@ -6,14 +6,16 @@ import (
 )
 
 type Address struct {
-	FirstLine  string             `json:"first_line,omitempty"`
-	SecondLine string             `json:"second_line,omitempty"`
-	ThirdLine  string             `json:"third_line,omitempty"`
-	Town       string             `json:"town,omitempty"`
-	PostCode   string             `json:"post_code,omitempty"`
-	County     string             `json:"county,omitempty"`
-	State      string             `json:"state,omitempty"`
-	Country    string             `json:"country,omitempty"`
+	FirstLine  string  `json:"first_line,omitempty"`
+	SecondLine string  `json:"second_line,omitempty"`
+	ThirdLine  string  `json:"third_line,omitempty"`
+	Town       string  `json:"town,omitempty"`
+	PostCode   string  `json:"post_code,omitempty"`
+	County     string  `json:"county,omitempty"`
+	State      string  `json:"state,omitempty"`
+	Country    string  `json:"country,omitempty"`
+	Latitude   float64 `json:"latitude"`
+	Longitude  float64 `json:"longitude"`
 }
 
 func (address *Address) Trim() {
