@@ -41,7 +41,7 @@ func (r *NotificationRequest) Validate() *rest_errors.RestErr {
 		return rest_errors.NewBadRequestError("missing user ids or destinations")
 	}
 
-	if strings.TrimSpace(r.Channel) != "" {
+	if strings.TrimSpace(r.Channel) == "" {
 		return rest_errors.NewBadRequestError("missing channel")
 	}
 
