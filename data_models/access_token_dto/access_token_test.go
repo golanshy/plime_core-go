@@ -7,25 +7,15 @@ import (
 )
 
 func TestAccessTokenConstants(t *testing.T) {
-	assert.EqualValues(t, 24, expirationTime)
-	assert.EqualValues(t, "client_credentials_repo", GrantTypeClientCredentials)
+	assert.EqualValues(t, int64(24), expirationTime)
+	assert.EqualValues(t, "client_credentials", GrantTypeClientCredentials)
 	assert.EqualValues(t, "refresh_token", GrantTypeRefreshToken)
 	assert.EqualValues(t, "bearer", TokenTypeBearer)
 }
 
 func TestGetNewAccessTokenByUserId(t *testing.T) {
-	at := GetNewAccessTokenByUserId("123")
-	assert.EqualValues(t, "", at.AccessToken, "new access token should not have defined access token id")
-	assert.EqualValues(t, 123, at.UserId, "new access token should not have an associated user id")
-	assert.True(t, at.UserId == "123", "new access token should not have an associated user id")
-	assert.False(t, at.IsExpired(), "brand new access token should not be expired")
-}
-
-func TestGetNewAccessTokenByClientId(t *testing.T) {
-	at := GetNewAccessTokenByClientId("123")
-	assert.EqualValues(t, "", at.AccessToken, "new access token should not have defined access token id")
-	assert.EqualValues(t, "123", at.ClientId, "new access token should not have an associated user id")
-	assert.True(t, at.UserId == "", "new access token should not have an associated user id")
+	at := GetNewAccessToken()
+	assert.EqualValues(t, "", at.Token, "new access token should not have defined access token id")
 	assert.False(t, at.IsExpired(), "brand new access token should not be expired")
 }
 
