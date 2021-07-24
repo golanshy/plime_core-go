@@ -12,19 +12,17 @@ const (
 )
 
 type User struct {
-	Id               primitive.ObjectID  `json:"id,omitempty" bson:"_id, omitempty"`
-	FirstName        string              `json:"first_name,omitempty"`
-	LastName         string              `json:"last_name,omitempty"`
-	Email            string              `json:"email,omitempty"`
-	DateOfBirth      string              `json:"date_of_birth,omitempty"`
-	Mobile           string              `json:"mobile,omitempty"`
-	CountryCode      string              `json:"country_code,omitempty"`
-	DateCreated      string              `json:"date_created,omitempty"`
-	Status           string              `json:"status,omitempty"`
-	Passcode         string              `json:"passcode,omitempty"`
-	BiometricEnabled bool                `json:"biometric_enabled,omitempty"`
-	Type             int64               `json:"type,omitempty"`
-	Address          address_dto.Address `json:"address,omitempty"`
+	Id          primitive.ObjectID  `json:"id,omitempty" bson:"_id, omitempty"`
+	Type        int64               `json:"type,omitempty"`
+	Status      string              `json:"status,omitempty"`
+	FirstName   string              `json:"first_name,omitempty"`
+	LastName    string              `json:"last_name,omitempty"`
+	Email       string              `json:"email,omitempty"`
+	CountryCode string              `json:"country_code,omitempty"`
+	Mobile      string              `json:"mobile,omitempty"`
+	DateOfBirth string              `json:"date_of_birth,omitempty"`
+	Address     address_dto.Address `json:"address,omitempty"`
+	DateCreated string              `json:"date_created,omitempty"`
 }
 
 type Users []User
